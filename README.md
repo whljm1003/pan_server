@@ -1,1 +1,1 @@
-# pan-client
+# pan-server
