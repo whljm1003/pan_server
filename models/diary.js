@@ -23,10 +23,15 @@ module.exports = (sequelize, DataTypes) => {
     weather: DataTypes.STRING,
     content: DataTypes.STRING,
     private: DataTypes.BOOLEAN,
-    like: DataTypes.INTEGER,
+    like: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     picUrl: DataTypes.STRING,
     date: DataTypes.DATE,
-    feelings: DataTypes.STRING
+    feelings: DataTypes.JSON,
+    userId:DataTypes.INTEGER,
+    bookId:DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Diary',
