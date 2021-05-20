@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      groupId: {
+        type: Sequelize.INTEGER
+      },
       bookName: {
         type: Sequelize.STRING
       },
