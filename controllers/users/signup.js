@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         2. 201코드와 userInfo 전송 (성공적으로 작성되었을 때 보내는 에러 코드)
     */
     const { userName, email, password } = req.body;
-    const encryptedPassword = bcrypt.hash(password, 10)
+    const encryptedPassword = await bcrypt.hash(password, 10)
 
 
     // 2.필요한 모든 정보를 입력받지 못한 경우 에러 메세지 422
