@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 const User = require('./user');
@@ -42,23 +42,23 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 
-db.User = User;
-db.Group = Group;
-db.Comment = Comment;
-db.Book = Book;
-db.Diary = Diary;
+// db.User = User;
+// db.Group = Group;
+// db.Comment = Comment;
+// db.Book = Book;
+// db.Diary = Diary;
 
-User.init(sequelize);
-Group.init(sequelize);
-Comment.init(sequelize);
-Book.init(sequelize);
-Diary.init(sequelize);
+// User.init(sequelize);
+// Group.init(sequelize);
+// Comment.init(sequelize);
+// Book.init(sequelize);
+// Diary.init(sequelize);
 
-User.associate(db);
-Group.associate(db);
-Comment.associate(db);
-Book.associate(db);
-Diary.associate(db);
+// User.associate(db);
+// Group.associate(db);
+// Comment.associate(db);
+// Book.associate(db);
+// Diary.associate(db);
 
 
 
