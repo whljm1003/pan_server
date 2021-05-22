@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { 
+const {
   login,
   accessToken,
-  refreshToken
+  refreshToken,
+  signup
 } = require('../controllers/users');
 
 // * POST /users/login
@@ -13,5 +14,7 @@ router.post("/login", login);
 router.get('/accessToken', accessToken);
 // * GET /users/refreshToken
 router.get('/refreshToken', refreshToken);
+//* POST /users/signup
+router.post('/signup', signup)
 
 module.exports = router;
