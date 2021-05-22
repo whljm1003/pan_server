@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
         2. 201코드와 userInfo 전송 (성공적으로 작성되었을 때 보내는 에러 코드)
     */
     const { userName, email, password } = req.body;
-    const encryptedPassword = bcrypt.hash(password, 10)
+    const encryptedPassword = await bcrypt.hash(password, 10)
+    console.log(encryptedPassword)
 
 
     // 2.필요한 모든 정보를 입력받지 못한 경우 에러 메세지 422
@@ -34,7 +35,7 @@ module.exports = async (req, res) => {
             if (!isCreated) {
                 res.status(409).send('이미 존재하는 이메일입니다.')   //1. 새로 생성되지 않고 이미 존재하는 이메일을 찾았으므로 409에러 메세지를 전송한다.
             }
-            res.status(201).send(userObj) //3. 입력받은 값으로 회원가입
+            res.status(201).json(userObj) //3. 입력받은 값으로 회원가입
         })
 }
 
