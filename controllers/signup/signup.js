@@ -1,6 +1,5 @@
 //작성자:김현영
-const db = require('../../models');
-const {user} = require('../../models/user');
+const {user} = require('../../models');
 const bcrypt = require('bcrypt');
 
 module.exports = {
