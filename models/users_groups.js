@@ -1,3 +1,4 @@
+//작성자:문지영
 'use strict';
 const {
   Model
@@ -11,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Users_groups.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
+
+      Users_groups.belongsTo(models.Group, {
+        foreignKey: 'groupId'
+      })
     }
   };
   Users_groups.init({

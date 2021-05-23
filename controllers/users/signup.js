@@ -13,11 +13,6 @@ module.exports = async (req, res) => {
     */
     const { userName, email, password } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10)
-<<<<<<< HEAD
-    console.log(encryptedPassword)
-=======
->>>>>>> e18f91d1bb1002ede3f3cd9dafc9f2c2d4f9c13d
-
 
     // 2.필요한 모든 정보를 입력받지 못한 경우 에러 메세지 422
     if (!userName || !email || !password) {
