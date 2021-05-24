@@ -11,11 +11,11 @@ module.exports = async (req, res) => {
         1) 암호화된 비밀번호와 salt 값을 db에 저장한다.
         2. 201코드와 userInfo 전송 (성공적으로 작성되었을 때 보내는 에러 코드)
     */
-    const { userName, email, password } = req.body;
+    const { username, email, password } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10)
 
     // 2.필요한 모든 정보를 입력받지 못한 경우 에러 메세지 422
-    if (!userName || !email || !password) {
+    if (!username || !email || !password) {
         res.status(422).send('필수 입력 사항을 모두 입력해주세요.')
     }
     //db에 email 정보를 찾아보고 없을 경우 새로운 정보를 생성한다.
@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
             email
         },
         defaults: {
-            userName: userName,
+            username: username,
             password: encryptedPassword
         }
     })
