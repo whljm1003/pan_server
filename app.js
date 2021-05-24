@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
+const diaryRoutes = require('./routes/diaries');
 
 models.sequelize.sync().then(() => {
     console.log(" DB 연결 성공");
@@ -26,6 +27,7 @@ app.use(
 );
 
 app.use("/", userRoutes);
+app.use("/", diaryRoutes);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 8080;
 
