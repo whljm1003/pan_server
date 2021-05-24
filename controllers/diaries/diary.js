@@ -10,10 +10,10 @@ module.exports = {
 
         const userInfo = await User.findOne({ where: { id: data.id } });
         console.log(userInfo);
-        const { weather, title, type, feelings, date, content } = req.body;
+        const { type, title, weather, content, private, picUrl, date, feelings } = req.body;
 
-        if (!title || !date || !content) {
-            return res.status(401).json({ message: '제목,날짜,내용을 정확히 입력해주세요.' })
+        if (!title || !type || !date || !content) {
+            return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
         Diary.create({
@@ -22,7 +22,8 @@ module.exports = {
             title: title,
             weather: weather,
             content: content,
-            // picUrl: '',
+            private: private,
+            picUrl: picUrl,
             date: date,
             feelings: feelings,
         })
