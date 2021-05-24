@@ -5,7 +5,8 @@ const {
   login,
   accessToken,
   refreshToken,
-  signup
+  signup,
+  withdrawal
 } = require('../controllers/users');
 
 // * POST /users/login
@@ -14,7 +15,9 @@ router.post("/login", login);
 router.get('/accessToken', accessToken);
 // * GET /users/refreshToken
 router.get('/refreshToken', refreshToken);
-//* POST /users/signup
-router.post('/signup', signup)
+// * POST /users/signup
+router.post('/signup', signup);
+// * DELETE /withdrawal
+router.delete('./withdrawal', withdrawal);
 
 module.exports = router;
