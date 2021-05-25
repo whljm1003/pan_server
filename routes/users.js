@@ -18,6 +18,6 @@ router.get('/refreshToken', refreshToken);
 // * POST /users/signup
 router.post('/signup', signup);
 // * DELETE /withdrawal
-router.delete('./withdrawal', withdrawal);
+router.delete('/withdrawal', withdrawal);
 
 module.exports = router;

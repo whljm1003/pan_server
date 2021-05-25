@@ -7,6 +7,8 @@ const app = express();
 const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
 
+require("dotenv").config();
+
 models.sequelize.sync().then(() => {
     console.log(" DB 연결 성공");
 }).catch(err => {
@@ -21,7 +23,7 @@ app.use(
     cors({
         origin: true,
         credentials: true,
-        methods: ["GET", "POST", "OPTIONS"],
+        methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     })
 );
 
@@ -29,18 +31,17 @@ app.use("/", userRoutes);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 8080;
 
-let server;
-if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
+// let server;
+// if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
 
-  const privateKey = fs.readFileSync(__dirname + "/key.pem", "utf8");
-  const certificate = fs.readFileSync(__dirname + "/cert.pem", "utf8");
-  const credentials = { key: privateKey, cert: certificate };
+//   const privateKey = fs.readFileSync(__dirname + "/key.pem", "utf8");
+//   const certificate = fs.readFileSync(__dirname + "/cert.pem", "utf8");
+//   const credentials = { key: privateKey, cert: certificate };
 
-  server = https.createServer(credentials, app);
-  server.listen(HTTPS_PORT, () => console.log("server runnning"));
+//   server = https.createServer(credentials, app);
+//   server.listen(HTTPS_PORT, () => console.log("server runnning"));
 
-} else {
-  server = app.listen(HTTPS_PORT)
-}
+// } else {
+let server = app.listen(8080)
 
 module.exports = server;
