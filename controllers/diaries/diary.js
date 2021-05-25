@@ -9,8 +9,12 @@ module.exports = {
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
 
         const userInfo = await User.findOne({ where: { id: data.id } });
-        console.log(userInfo);
-        const { type, title, weather, content, private, picUrl, date, feelings } = req.body;
+        // console.log(userInfo);
+
+        // form data가 있을 경우 => Form data picUrl을 같이 저장
+        const img = req.file.path;
+        // form data가 없을 경우 => req.body만 저장
+        const { type, title, weather, content, private, date, feelings } = req.body;
 
         if (!title || !type || !date || !content) {
             return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
@@ -23,7 +27,7 @@ module.exports = {
             weather: weather,
             content: content,
             private: private,
-            picUrl: picUrl,
+            // picUrl: picUrl,
             date: date,
             feelings: feelings,
         })
