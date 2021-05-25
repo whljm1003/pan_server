@@ -1,6 +1,7 @@
 const { User } = require('../../models');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
+require("dotenv").config();
 
 module.exports = async (req, res) => {
     // 요청받은 email과 일치하는 user의 정보

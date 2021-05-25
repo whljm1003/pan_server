@@ -8,6 +8,8 @@ const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
 const diaryRoutes = require('./routes/diaries');
 
+require("dotenv").config();
+
 models.sequelize.sync().then(() => {
     console.log(" DB 연결 성공");
 }).catch(err => {
@@ -22,7 +24,7 @@ app.use(
     cors({
         origin: true,
         credentials: true,
-        methods: ["GET", "POST", "OPTIONS"],
+        methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     })
 );
 
