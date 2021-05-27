@@ -9,11 +9,17 @@ module.exports = {
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
 
         const userInfo = await User.findOne({ where: { id: data.id } });
-        console.log(userInfo);
-        const { type, title, weather, content, private, picUrl, date, feelings } = req.body;
+        // console.log(userInfo);
+
+        // form data가 있을 경우 => Form data picUrl을 같이 저장
+        // form data가 없을 경우 => req.body만 저장
+        // 아니면 나눌 것이 아니라, form data가 있으면 자동으로 저장되고, 없으면 알아서 null 값으로 저장
+
+        const { type, title, weather, content, private, date, feelings, picUrl } = req.body;
+        //여기서 picUrl은 이미지 업로드 후 picUrl value를 받아온 값을 넣기 때문에 req.body로 요청
 
         if (!title || !type || !date || !content) {
-            return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
+            return res.status(400).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
         Diary.create({
@@ -23,19 +29,10 @@ module.exports = {
             weather: weather,
             content: content,
             private: private,
-            picUrl: picUrl,
+            picUrl: picUrl, //글 일기일 경우 => NULL로 자동 저장됨
             date: date,
             feelings: feelings,
         })
         res.status(200).json({ message: '일기가 성공적으로 저장되었습니다.' })
-        // users - diaries
-        // pictureImg // Form Data Parameters => 프론트에서 업로드한 이미지 url을 db에 저장하기
-        // weather // 그림?
-        // title 
-        // type // 글 or 그림일기
-        // feelings // 그림
-        // date
-        // content
-        //401 제목,날짜,내용을 정확히 입력해주세요.
-    }
+    },
 }
