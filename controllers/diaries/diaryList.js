@@ -6,7 +6,7 @@ const { Diary,User,Book } = require( '../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
-    
+   
     const authorization = req.headers.authorization;
     const token = authorization.split(' ')[1];
     const data = jwt.verify(token, process.env.ACCESS_SECRET);
@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
 
     const diaryList = await Diary.findAll({
         where: condition,
+
         attributes: [
             [sequelize.col("User.username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
             "type",
