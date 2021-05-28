@@ -6,6 +6,7 @@ const {
     diary,
     diaryList,
     groupDiaryList,
+    trending
 
 } = require('../controllers/diaries');
 
@@ -29,6 +30,7 @@ router.post("/diaries", diary.post); // 일기 업로드 라우터
 router.get("/diaries", diaryList);
 // * GET / group diaries
 router.get("/group-diaries", groupDiaryList);
-
+// * GET / trending
+router.get("/trending", trending);
 
 module.exports = router;
