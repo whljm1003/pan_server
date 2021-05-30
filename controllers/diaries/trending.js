@@ -48,71 +48,33 @@ module.exports = {
             res.status(400).json({ message: '로그인 후 이용바랍니다.' });
         }
 
-        //유저가 다이어리에 좋아요를 누르면 기존값 + 1
-        const diaryId = req.params.id
-        const diary = await Diary.findOne({
-            where: { id: diaryId },
-            include : {
-                model : Like,
-                attributes : ['userId']
-              }
-        })
-        // console.log(diaryId) // 1
-        console.log("DIARY", diary)
-        console.log(Like.dataValues)
-
         //diaryId를 찾아서 그 다이어리 like에 + 1을 해줘야 됨.
-        //그런데 같은 유저가 두 번 이상 못 누르게 해야 함.
-        // const like = await Diary.findOne({
-        //     where: { id: userInfo}
-        // }) // 로그인 유저가 다이어리 1번 id를 이미 클릭했을 경우, 그 다이어리 id를 또 누른다면 like는 삭제되어야 함.
-       if(diary){
-        Diary.update({
-            like: diary.dataValues.like - 1
-        },
-        { where: { id: diaryId } },
-        )
-        res.status(200).json({ message: '좋아요가 취소되었습니다. '})
-       
-       } else {
-        Diary.update({
-            like: diary.dataValues.like + 1
-        },
-            { where: { id: diaryId } },
-        ) // where 문법은 따로 중괄호에 담아줘야 됨.
-        // console.log(diary.dataValues.like) // 0
-        res.status(200).json({ message: '좋아요가 등록되었습니다. ' })
-            }
-        
+        const diaryId = req.params.id
+        const like = await Like.findOne({
+            where: { userId: data.id, diaryId: diaryId }
+        }) //Likes 테이블에 로그인 한 유저의 좋아요가 있는지 찾음.
 
+        // console.log(like)
+
+        //해당 유저가 이미 like를 누른 경우는 좋아요 - 1
+        if (like) {
+            Like.update({
+                like: like.dataValues.like - 1
+            },
+                { where: { userId: data.id, diaryId: diaryId } },// where 문법은 따로 중괄호에 담아줘야 됨.
+            )
+            res.status(200).json({ message: '좋아요가 취소되었습니다.' })
+
+        }
+        //like를 처음 누른 경우는 like.dataValues값이 존재하지 않기 때문에(null), 값은 그냥 1이 되게 하면 됨.
+        else {
+            Like.create({
+                userId: data.id,
+                diaryId: diaryId,
+                like: 1
+            },
+            )
+            res.status(200).json({ message: '좋아요가 등록되었습니다.' })
+        }
     },
-
-    // delete: async (req, res) => {
-
-    //     const authorization = req.headers.authorization;
-    //     const token = authorization.split(' ')[1];
-    //     const data = jwt.verify(token, process.env.ACCESS_SECRET);
-
-    //     const userInfo = await User.findOne({ where: { id: data.id } });
-
-    //     //로그인 한 유저만 좋아요를 취소할 수 있음.
-    //     if (!userInfo) {
-    //         res.status(400).json({ message: '로그인 후 이용바랍니다.' });
-    //     }
-
-    //     //유저가 다이어리에 좋아요를 누르면 기존값 - 1
-    //     const diaryId = req.params.id
-    //     const diary = await Diary.findOne({
-    //         where: { id: diaryId },
-    //     })
-
-    //     //diaryId를 찾아서 그 다이어리 like에 - 1을 해줘야 됨.
-    //     //그런데 같은 유저가 두 번 이상 못 누르게 해야 함.
-    //     Diary.update({
-    //         like: diary.dataValues.like - 1
-    //     },
-    //         { where: { id: diaryId } },
-    //     )
-    //     res.status(200).json({ message: '좋아요가 취소되었습니다. ' })
-    // }
 }
