@@ -56,11 +56,9 @@ module.exports = {
 
         // console.log(like)
 
-        //해당 유저가 이미 like를 누른 경우는 좋아요 - 1
+        //해당 유저가 이미 like를 누른 경우는 해당 데이터 전체 삭제
         if (like) {
-            Like.update({
-                like: like.dataValues.like - 1
-            },
+            Like.destroy(
                 { where: { userId: data.id, diaryId: diaryId } },// where 문법은 따로 중괄호에 담아줘야 됨.
             )
             res.status(200).json({ message: '좋아요가 취소되었습니다.' })
