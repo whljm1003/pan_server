@@ -23,10 +23,10 @@ module.exports = async (req, res) => {
     // jwt.sign(payload, secretKey, options)
     // 일치하는 유저가 있을 경우:
     // 필요한 데이터(id, userId, email, createdAt, updatedAt)를 payload에 담아 JWT token을 생성합니다
-
+    console.log(process.env.ACCESS_SECRET)
     const accessToken = jwt.sign(userInfo.dataValues, process.env.ACCESS_SECRET, { expiresIn: "1d" })
     const refreshToken = jwt.sign(userInfo.dataValues, process.env.REFRESH_SECRET, { expiresIn: "3d" })
-
+    
     res.cookie('refreshToken', refreshToken, {  //이름, 값, 옵션 지정
         httpOnly: true,
         secure: true,
