@@ -53,7 +53,6 @@ module.exports = async (req, res) => {
             }
         ],
         order:[ ['createdAt', 'DESC'] ], //The order option takes an array of items to order the query by or a sequelize method. These items are themselves arrays in the form [column, direction].
-        limit: 10
         
     })
     res.status(200).json({data: diaryList, message:'공개된 개인 일기의 목록입니다.'})

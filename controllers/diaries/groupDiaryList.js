@@ -43,7 +43,6 @@ module.exports = async (req, res) => {
                 attributes: []
             }
         ],
-        limit: 10,
         order: ["createdAt"]
     })
     res.status(200).json({data: groupDiaryList, message:'공개된 개인 일기의 목록입니다.'})

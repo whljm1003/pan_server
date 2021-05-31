@@ -27,7 +27,6 @@ module.exports = async (req, res) =>{
             }
         ],
         order: [ ['like', 'DESC']],
-        limit : 10
     })
     res.status(200).json({data: trending, message: '좋아요 수가 많은 공개된 일기 목록입니다.'})
 }
