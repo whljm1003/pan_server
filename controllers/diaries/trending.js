@@ -1,6 +1,7 @@
 //작성자:김현영(get), 문지영(post, delete)
 //like가 많은 10개의 공개 다이어리 목록 (개인, 그룹 구분 없음)
 const { Diary, User, Like } = require('../../models');
+const sequelize = require("sequelize")
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -8,16 +9,16 @@ module.exports = {
         const trending = await Diary.findAll({
             where: { private: false },
             attributes: [
-                [sequelize.col("User.username"), "writer"],
+                [sequelize.col("username"), "writer"],
                 "type",
                 "title",
                 "weather",
                 "content",
                 "private",
-                "like",
                 "picUrl",
                 "date",
                 "feelings",
+                [sequelize.col("like"), "like"],
                 "createdAt",
                 "updatedAt"
             ],
@@ -25,11 +26,15 @@ module.exports = {
                 {
                     model: User,
                     required: false,
+                    attributes: [],
+                },
+                {
+                    model: Like,
+                    required: false,
                     attributes: []
                 }
             ],
-            order: [['like', 'DESC']],
-            limit: 10
+            order: [[sequelize.col("like"), 'DESC']],
         })
         res.status(200).json({ data: trending, message: '좋아요 수가 많은 공개된 일기 목록입니다.' })
     },

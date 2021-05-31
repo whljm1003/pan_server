@@ -12,12 +12,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Like.belongsTo(models.User, {
-        foreignKey: 'userId'
+      models.Like.belongsTo(models.User, {
+        foreignKey: 'userId',
+        TargetKey: 'id'
       }) //한 개의 좋아요에는 한 명의 유저만 있음.
 
-      Like.belongsTo(models.Diary, {
-        foreignKey: 'diaryId'
+      models.Like.belongsTo(models.Diary, {
+        foreignKey: 'diaryId',
+        TargetKey: 'id'
       }) //한 개의 좋아요에는 하나의 다이어리만 있음.
     }
   };
