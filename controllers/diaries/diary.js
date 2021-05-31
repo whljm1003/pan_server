@@ -1,5 +1,5 @@
 //작성자:문지영
-const { User, Diary } = require('../../models');
+const { User, Diary, Like } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -50,7 +50,12 @@ module.exports = {
         //선택한 일기 데이터가 있을 경우
         const diary = await Diary.findAll({
             where: { id: diaryId },
-            attributes: ['title', 'weather', 'content', 'like', 'date', 'feelings', 'picUrl']
+            attributes: ['title', 'weather', 'content',[sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl'],
+            include: [{
+                model: Like,
+                required : false,
+                attributes: []
+            }]
         });
         res.status(200).json({ data: diary, message: '선택한 일기 내용입니다. ' });
     },
