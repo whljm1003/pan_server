@@ -6,26 +6,12 @@ const { Diary,User,Book } = require( '../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
-    const authorization = req.headers.authorization;
-    const token = authorization.split(' ')[1];
-    const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    const userInfo = await User.findOne({ where: { id: data.id } });
-
-    const condition = {}
-    if(userInfo){   //유저 정보가 있으면
-        condition = { 
-            [sequelize.Op.or]:[
-                {private: false}, //공개 일기이거나 
-                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
-             ]
-            }
-    }
-    condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
-
+    //로그인한 유저가 해당 그룹에 속한 사용자일 경우 비공개 일기도 보여줘야 하는데 어떻게 하지?
     const groupDiaryList = await Diary.findAll({
-        where: condition,
+        where: {private:false},
         attributes: [
-            [sequelize.col("User.username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            [sequelize.col("username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            [sequelize.col("groupId"), "group"], 
             "title",
             "weather",
             "content",
