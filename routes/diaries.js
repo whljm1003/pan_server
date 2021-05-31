@@ -31,9 +31,15 @@ router.get("/diaries", diaryList);
 // * GET / group diaries
 router.get("/group-diaries", groupDiaryList);
 // * GET / trending
-router.get("/trending", trending);
+router.get("/trending", trending.get);
 
-// * GET /diaries/:id 
+// * POST/diaries/:id/trending 
+router.post("/diaries/:id/trending", trending.post);
+
+// * DELETE/diaries/:id/trending
+// router.delete("/diaries/:id/trending", trending.delete);
+
+// * GET/diaries/:id 
 router.get("/diaries/:id", diary.get); // 선택한 일기 내용 보여주기
 
 // * PUT /diaries/:id 
