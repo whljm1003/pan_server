@@ -1,4 +1,5 @@
 //작성자:문지영
+const sequelize = require("sequelize")
 const { User, Diary, Like } = require('../../models');
 const jwt = require('jsonwebtoken');
 
@@ -42,18 +43,15 @@ module.exports = {
         //GET/diaries/:id
         const diaryId = req.params.id;
 
-        //일기 데이터가 존재하지 않을 경우
-        // if (Diary.dataValues === undefined) {
-        //     res.status(400).json({ message: '일기 내용을 불러올 수 없습니다. ' })
-        // }
+        //로그인 회원만 볼 수 있음(private이 true인 일기도)
 
-        //선택한 일기 데이터가 있을 경우
+        //선택한 일기 데이터가 있을 경우(비로그인 회원도 볼 수 있음, private이 falses인 일기만)
         const diary = await Diary.findAll({
             where: { id: diaryId },
-            attributes: ['title', 'weather', 'content',[sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl'],
+            attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl'],
             include: [{
                 model: Like,
-                required : false,
+                required: false,
                 attributes: []
             }]
         });

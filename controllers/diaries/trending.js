@@ -43,18 +43,18 @@ module.exports = {
         //좋아요 한번 누를 때마다 like count 1씩 증가
         //diaries/:id/trending
         const authorization = req.headers.authorization;
-        const token = authorization.split(' ')[1];
-        const data = jwt.verify(token, process.env.ACCESS_SECRET);
-
-        const userInfo = await User.findOne({ where: { id: data.id } });
 
         //로그인 한 유저만 좋아요를 누를 수 있음.
-        if (!userInfo) {
+        // console.log(req.headers)
+        if (!authorization) {
             res.status(400).json({ message: '로그인 후 이용바랍니다.' });
         }
 
         //diaryId를 찾아서 그 다이어리 like에 + 1을 해줘야 됨.
         const diaryId = req.params.id
+        const token = authorization.split(' ')[1];
+        const data = jwt.verify(token, process.env.ACCESS_SECRET);
+
         const like = await Like.findOne({
             where: { userId: data.id, diaryId: diaryId }
         }) //Likes 테이블에 로그인 한 유저의 좋아요가 있는지 찾음.
