@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     private: DataTypes.BOOLEAN,
     picUrl: DataTypes.STRING,
     date: DataTypes.DATE,
-    feelings: DataTypes.JSON,
+    feelings: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     bookId: DataTypes.INTEGER
   }, {
