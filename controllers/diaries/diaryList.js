@@ -7,25 +7,29 @@ const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
    
-    // const authorization = req.headers.authorization;
-    // const token = authorization.split(' ')[1];
-    // const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    // const userInfo = await User.findOne({ where: { id: data.id } });
-    
-    // const condition = {}
-    // if(authorization){   //유저 정보가 있으면
-    //     condition = { 
-    //         [sequelize.Op.or]:[
-    //             {private: false}, //공개 일기이거나 
-    //             {[sequelize.Op.and]: [{private:true}, {userId : userInfo.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
-    //          ]
-    //         }
-    // }
-    // condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
+    const authorization = req.headers.authorization;  
+
+    if(!authorization){
+        condition = {private:false}
+    }
+    else{
+        const token = authorization.split(' ')[1];
+        const data = jwt.verify(token, process.env.ACCESS_SECRET);
+        const userInfo = await User.findOne({ where: { id: data.id } });
+
+        if(userInfo){
+            condition = {
+                [sequelize.Op.or]:[
+                {private: false}, //공개 일기이거나 
+                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
+             ]
+            }
+        }condition = {private:false}
+    }
    
     const diaryList = await Diary.findAll({
-        where: {private: false},
-        //condition,
+        where: //{private: false},
+        condition,
 
         attributes: [
             [sequelize.col("username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
@@ -57,15 +61,15 @@ module.exports = async (req, res) => {
                 required: false,
                 attributes: []
             },
-            // {
-            //     model: Comment,
-            //     required: false,
-            //     attributes: [
-            //         "userId", // should be changed to [sequelize.col("username"), "username"]
-            //         "text"                    
-            //     ],
-            //     order: [ ['createdAt', 'DESC']]
-            // }
+            {
+                model: Comment,
+                required: false,
+                attributes: [
+                    "userId", // should be changed to [sequelize.col("username"), "username"]
+                    "text"                    
+                ],
+                order: [ ['createdAt', 'DESC']]
+            }
         ],
         order:[ ['createdAt', 'DESC'] ], //The order option takes an array of items to order the query by or a sequelize method. These items are themselves arrays in the form [column, direction].
         
