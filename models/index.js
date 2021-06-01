@@ -42,24 +42,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 
-// db.User = User;
-// db.Group = Group;
-// db.Comment = Comment;
-// db.Book = Book;
-// db.Diary = Diary;
-
-// User.init(sequelize);
-// Group.init(sequelize);
-// Comment.init(sequelize);
-// Book.init(sequelize);
-// Diary.init(sequelize);
-
-// User.associate(db);
-// Group.associate(db);
-// Comment.associate(db);
-// Book.associate(db);
-// Diary.associate(db);
-
-
-
 module.exports = db;
