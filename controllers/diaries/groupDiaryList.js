@@ -2,7 +2,7 @@
 //그룹에서 작성한 공개 다이어리 목록입니다.
 //로그인 상태인 경우 내가 속한 그룹의 비공개 일기도 볼 수 있습니다.
 const sequelize = require("sequelize")
-const { Diary,User,Book, Like } = require( '../../models');
+const { Diary,User,Book,Like,Comment } = require( '../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
@@ -55,6 +55,15 @@ module.exports = async (req, res) => {
                 model: Like,
                 required: false,
                 attributes: []
+            },
+            {
+                model: Comment,
+                required: true,
+                attributes: [
+                    "userId", // should be changed to [sequelize.col("username"), "username"]
+                    "comments"                    
+                ],
+                order: [ ['createdAt', 'DESC']]
             }
         ],
         order: ["createdAt"]

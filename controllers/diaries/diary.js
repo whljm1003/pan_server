@@ -1,5 +1,5 @@
 //작성자:문지영
-const sequelize = require("sequelize")
+const sequelize = require("sequelize");
 const { User, Diary, Like } = require('../../models');
 const jwt = require('jsonwebtoken');
 

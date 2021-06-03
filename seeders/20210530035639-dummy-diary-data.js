@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Diaries', [
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "인연이라는 것",
@@ -18,7 +18,7 @@ module.exports = {
         updatedAt: "2021-05-01 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "간이역",
@@ -32,7 +32,7 @@ module.exports = {
         updatedAt: "021-05-02 08:11:42"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "우주 안 나의 영역",
@@ -46,7 +46,7 @@ module.exports = {
         updatedAt: "2021-05-03 13:28:50"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "마음을 비우자",
@@ -60,7 +60,7 @@ module.exports = {
         updatedAt: "2021-05-04 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "양인지검(兩刃之劍)",
@@ -74,7 +74,7 @@ module.exports = {
         updatedAt: "2021-05-05 14:03:33"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "통찰력",
@@ -87,7 +87,7 @@ module.exports = {
         createdAt: "2021-05-06 07:36:06",
         updatedAt: "2021-05-06 07:36:06"
       }, {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "현재에 집중하자",
@@ -101,7 +101,7 @@ module.exports = {
         updatedAt: "2021-05-07 13:35:34"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "what doesn't kill you makes you stronger",
@@ -115,7 +115,7 @@ module.exports = {
         updatedAt: "2021-05-08 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "모험",
@@ -129,7 +129,7 @@ module.exports = {
         updatedAt: "2021-05-09 04:26:54"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "생명을 위한 죽음",
@@ -143,7 +143,7 @@ module.exports = {
         updatedAt: "2021-05-10 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "어렵다",
@@ -157,7 +157,7 @@ module.exports = {
         updatedAt: "2021-05-05 13:35:34"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "호사다마",
@@ -171,7 +171,7 @@ module.exports = {
         updatedAt: "2021-05-06 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "갑자기 너가 생각나",
@@ -185,7 +185,7 @@ module.exports = {
         updatedAt: "2021-05-07 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "Always remember us this way",
@@ -199,7 +199,7 @@ module.exports = {
         updatedAt: "2021-05-08 12:09:48"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "파도가 밀려와도",
@@ -213,7 +213,7 @@ module.exports = {
         updatedAt: "2021-05-09 07:36:06"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "model querying -basics",
@@ -227,7 +227,7 @@ module.exports = {
         updatedAt: "2021-05-11 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "Simple INSERT queries",
@@ -241,7 +241,7 @@ module.exports = {
         updatedAt: "2021-05-12 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "Simple SELECT queries",
@@ -255,7 +255,7 @@ module.exports = {
         updatedAt: "2021-05-12 03:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "Applying WHERE clauses",
@@ -269,7 +269,7 @@ module.exports = {
         updatedAt: "2021-05-12 06:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "Creating in bulk",
@@ -283,7 +283,7 @@ module.exports = {
         updatedAt: "2021-05-13 03:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "로망로랑",
@@ -297,7 +297,7 @@ module.exports = {
         updatedAt: "2021-05-14 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "랄프 왈도 에머슨",
@@ -311,7 +311,7 @@ module.exports = {
         updatedAt: "2021-05-15 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "루이사 메이올콧",
@@ -325,7 +325,7 @@ module.exports = {
         updatedAt: "2021-05-16 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "일기쓰기와 정신 건강 사이의 관계",
@@ -339,7 +339,7 @@ module.exports = {
         updatedAt: "2021-05-16 15:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "일기",
@@ -353,7 +353,7 @@ module.exports = {
         updatedAt: "2021-05-17 03:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "일기의 역사",
@@ -367,7 +367,7 @@ module.exports = {
         updatedAt: "2021-05-18 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "한국의 일기",
@@ -381,7 +381,7 @@ module.exports = {
         updatedAt: "2021-05-18 09:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "11권은 그룹일기장",
@@ -395,7 +395,7 @@ module.exports = {
         updatedAt: "2021-05-19 02:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "나의 두 번째 일기",
@@ -409,7 +409,7 @@ module.exports = {
         updatedAt: "2021-05-20 15:34:57"
       },
       {
-        userId: 2,
+        userId: 1,
         bookId: 1,
         type: 1,
         title: "카카오",
@@ -421,6 +421,34 @@ module.exports = {
         "feelings": "upset",
         createdAt: "2021-05-21 03:34:57",
         updatedAt: "2021-05-21 03:34:57"
+      },
+      {
+        userId: 3,
+        bookId: 1,
+        type: 1,
+        title: "같은 그룹 kimcoding과 다른 유저",
+        weather: "rainy",
+        content: "카카오만큼 우리 생활의 일부분에 깊숙이 들어온 기업이 일을까? 4600만 명이 넘는 메신저를 쓰는 ‘카카오톡’이 큰 역할을 하고 있다. 텔레그램, 라인, 위챗 등이 대거 등장하긴 했지만 카카오톡은 독보적 1위 자리 한지 오래다. 이 플랫폼은 현재 쇼핑, 게임, 금융, 콘텐츠, 광고 등 사업 영역을 넓혀가고 있다.카카오의 사업은 플랫폼과 콘텐츠로 나눠볼 수 있다. 톡 비즈와 포털 비즈, 신사업 등이 포함된 플랫폼과 게임, 뮤직 등으로 구성된 콘텐츠가 있다. 이 중 특히 2019년 10월 시작한 카카오톡 채팅 상단에 노출시키는 광고인 비즈 보드로 인해 플랫폼의 매출은 지난 2019년 1조 원을 넘어섰다.",
+        private: false,
+        picUrl: null,
+        date: "2021-05-22 03:34:57",
+        "feelings": "upset",
+        createdAt: "2021-05-22 03:34:57",
+        updatedAt: "2021-05-22 03:34:57"
+      },
+      {
+        userId: 3,
+        bookId: 2,
+        type: 1,
+        title: "3번 유저의 개인 일기장",
+        weather: "rainy",
+        content: "카카오만큼 우리 생활의 일부분에 깊숙이 들어온 기업이 일을까? 4600만 명이 넘는 메신저를 쓰는 ‘카카오톡’이 큰 역할을 하고 있다. 텔레그램, 라인, 위챗 등이 대거 등장하긴 했지만 카카오톡은 독보적 1위 자리 한지 오래다. 이 플랫폼은 현재 쇼핑, 게임, 금융, 콘텐츠, 광고 등 사업 영역을 넓혀가고 있다.카카오의 사업은 플랫폼과 콘텐츠로 나눠볼 수 있다. 톡 비즈와 포털 비즈, 신사업 등이 포함된 플랫폼과 게임, 뮤직 등으로 구성된 콘텐츠가 있다. 이 중 특히 2019년 10월 시작한 카카오톡 채팅 상단에 노출시키는 광고인 비즈 보드로 인해 플랫폼의 매출은 지난 2019년 1조 원을 넘어섰다.",
+        private: false,
+        picUrl: null,
+        date: "2021-05-22 04:34:57",
+        "feelings": "upset",
+        createdAt: "2021-05-22 04:34:57",
+        updatedAt: "2021-05-22 04:34:57"
       }
     ]);
   },

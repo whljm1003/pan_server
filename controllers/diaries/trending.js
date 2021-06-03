@@ -1,6 +1,6 @@
 //작성자:김현영(get), 문지영(post, delete)
 //like가 많은 10개의 공개 다이어리 목록 (개인, 그룹 구분 없음)
-const { Diary, User, Like } = require('../../models');
+const { Diary,User,Like,Comment } = require('../../models');
 const sequelize = require("sequelize")
 const jwt = require('jsonwebtoken');
 
@@ -32,6 +32,15 @@ module.exports = {
                     model: Like,
                     required: false,
                     attributes: []
+                },
+                {
+                    model: Comment,
+                    required: true,
+                    attributes: [
+                        "userId", // should be changed to [sequelize.col("username"), "username"]
+                        "comments"                    
+                    ],
+                    order: [ ['createdAt', 'DESC']]
                 }
             ],
             order: [[sequelize.col("like"), 'DESC']],

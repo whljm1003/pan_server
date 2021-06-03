@@ -44,6 +44,19 @@ module.exports = {
             where: { id : commentId }
         })
         res.status(200).json({ message: '댓글이 삭제되었습니다.' })
+    },
+
+    put : async (req, res) => {
+        const authorization = req.headers.authorization;
+        const token = authorization.split(' ')[1];
+        const data = jwt.verify(token, process.env.ACCESS_SECRET);
+
+        const userInfo = await User.findOne({ where: { id: data.id } });
+        const commentId= req.params.id;
+        const { text, diaryId } = req.body;
+
+        //text의 내용이 
+        
     }
 
 }

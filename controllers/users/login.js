@@ -30,7 +30,8 @@ module.exports = async (req, res) => {
     res.cookie('refreshToken', refreshToken, {  //이름, 값, 옵션 지정
         httpOnly: true,
         secure: true,
-        // sameSite: 'none' // TypeError: option sameSite is invalid
+        sameSite: 'none' // TypeError: option sameSite is invalid
     }).status(200).json({ data: { accessToken: accessToken }, message: '로그인 되었습니다.' });
+    // console.log("REFRESHTOKEN", refreshToken)
 };
 
