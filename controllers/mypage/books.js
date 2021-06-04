@@ -91,7 +91,7 @@ module.exports = {
             return res.status(402).json({ message: '내용을 수정할 수 없습니다. ' })
         }
 
-        // 로그인 한 유저와 일기를 쓴 유저가 같을 경우, 즉 나는 내 일기만 수정할 수 있음.
+        // 로그인 한 유저와 일기장을 만든 유저가 같을 경우, 즉 나는 내 일기장만 수정할 수 있음.
         else if (book.dataValues.userId === userInfo.id) {
             Book.update({
                 userId: userInfo.dataValues.id,
@@ -103,6 +103,7 @@ module.exports = {
             res.status(200).json({ message: '내용이 변경되었습니다.' })
         }
     },
+
     delete: async (req, res) => {
         // 개인 일기장 삭제
         // * DELETE/books/:id
@@ -113,8 +114,8 @@ module.exports = {
         const userInfo = await User.findOne({ where: { id: data.id } });
         const bookId = req.params.id;
 
-        // 삭제할 때도 내가 내 일기만 삭제할 수 있도록, 내가 다른 사람의 일기를 삭제하도록 하면 안됨.
-        // 로그인 한 유저와 일기를 쓴 유저가 다를 경우는 삭제할 수 없도록, 즉 나는 남의 일기는 삭제할 수 없음.
+        // 삭제할 때도 내가 내 일기장만 삭제할 수 있도록, 내가 다른 사람의 일기장을 삭제하도록 하면 안됨.
+        // 로그인 한 유저와 일기장을 만든 유저가 다를 경우는 삭제할 수 없도록, 즉 나는 남의 일기장은 삭제할 수 없음.
         const book = await Book.findOne({
             where: { id: bookId },
         });
@@ -122,7 +123,7 @@ module.exports = {
             return res.status(400).json({ message: '일기장을 삭제할 수 없습니다. ' })
         }
 
-        // 로그인 한 유저와 일기를 쓴 유저가 같을 경우, 즉 나는 내 일기만 삭제할 수 있음.
+        // 로그인 한 유저와 일기장을 만든 유저가 같을 경우, 즉 나는 내 일기장만 삭제할 수 있음.
         else if (book.dataValues.userId === userInfo.id) {
             Book.destroy({
                 where: { id: bookId }
