@@ -8,4 +8,7 @@ const {
 // * POST/mypage/books
 router.post("/books", books.post);
 
+// * GET/mypage/books
+router.get("/books", books.get);
+
 module.exports = router;
