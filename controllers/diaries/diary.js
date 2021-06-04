@@ -69,13 +69,13 @@ module.exports = {
         const diaryId = req.params.id;
         const { type, title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
 
-        //일기에 변경 사항이 없을 경우
-        if (title || type || date || content === Diary.dataValues) {
-            return res.status(400).json({ message: '변경된 사항이 없습니다. ' })
-        }
+        // //일기에 변경 사항이 없을 경우
+        // if (title || type || date || content === Diary.dataValues) {
+        //     return res.status(400).json({ message: '변경된 사항이 없습니다. ' })
+        // }
 
-        //항목을 제대로 입력하지 않았을 경우 
-        else if (!title || !type || !date || !content) {
+        // //항목을 제대로 입력하지 않았을 경우 
+        if (!title || !type || !date || !content) {
             return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
