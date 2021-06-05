@@ -30,7 +30,7 @@ module.exports = {
             title: title,
             weather: weather,
             content: content,
-            // private: private,
+            // private: private, // 따로 메소드를 만들어야 됨
             picUrl: picUrl, //글 일기일 경우 => NULL로 자동 저장됨
             date: date,
             feelings: feelings,
@@ -42,26 +42,54 @@ module.exports = {
         //글 or 그림 일기 보기
         //GET/diaries/:id
         const authorization = req.headers.authorization;
-        const token = authorization.split(' ')[1];
-        const data = jwt.verify(token, process.env.ACCESS_SECRET);
-
-        const userInfo = await User.findOne({ where: { id: data.id } });
         const diaryId = req.params.id;
 
-        //로그인 회원만 볼 수 있음(private이 true, false 상관없이 다 볼 수 있음)
-        // if(!authorization)
+        //비로그인 회원도 볼 수 있음, private이 false인 일기만 볼 수 있음, main page용
+        if (!authorization) {
+            const diary = await Diary.findAll({
+                where: { id: diaryId, private: false },
+                attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                include: [{
+                    model: Like,
+                    required: false,
+                    attributes: []
+                }]
+            });
+            res.status(200).json({ data: diary, message: '선택한 일기 내용입니다.' });
+        } else {
+            //로그인 회원만 볼 수 있음(private이 true, false 상관없이 다 볼 수 있음), mypage용, 단 private=true인건 본인만 볼 수 있게.
+            const token = authorization.split(' ')[1];
+            const data = jwt.verify(token, process.env.ACCESS_SECRET);
 
-        //선택한 일기 데이터가 있을 경우(비로그인 회원도 볼 수 있음, private이 falses인 일기만 볼 수 있음)
-        const diary = await Diary.findAll({
-            where: { id: diaryId },
-            attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl'],
-            include: [{
-                model: Like,
-                required: false,
-                attributes: []
-            }]
-        });
-        res.status(200).json({ data: diary, message: '선택한 일기 내용입니다. ' });
+            const diary = await Diary.findAll({
+                where: { id: diaryId },
+            });
+
+            if (diary[0].dataValues.private === false) {
+                const publicDiary = await Diary.findAll({
+                    where: { id: diaryId, private: false },
+                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    include: [{
+                        model: Like,
+                        required: false,
+                        attributes: []
+                    }]
+                });
+                res.status(200).json({ data: publicDiary, message: '선택한 일기 내용입니다.' }); //로그인했을 때 private=false일기 보기
+            } else if (diary[0].dataValues.private === true) {
+                const privateDiary = await Diary.findAll({
+                    where: { id: diaryId, userId: data.id },
+                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    include: [{
+                        model: Like,
+                        required: false,
+                        attributes: []
+                    }]
+                });
+                res.status(200).json({ data: privateDiary, message: '선택한 일기 내용입니다.' });//로그인했을 때 private-true인 본인 일기 보기
+            }
+            //    console.log(diary[0].dataValues.private)
+        }
     },
 
     put: async (req, res) => {
