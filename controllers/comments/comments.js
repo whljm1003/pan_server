@@ -10,8 +10,9 @@ module.exports = {
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findOne({ where: { id: data.id } });
+        const diaryId = req.params.diaryId
 
-        const { text, diaryId } = req.body;
+        const { text } = req.body;
         if(!userInfo){
             return res.status(400).json({ message: '로그인 해 주세요!'})
         }
@@ -20,8 +21,8 @@ module.exports = {
         }
         Comment.create({
             userId: userInfo.dataValues.id, 
-            diaryId: diaryId,
-            text: text
+            diaryId,
+            text
         })
         res.status(200).json({ message: '일기가 성공적으로 저장되었습니다.' })
     },

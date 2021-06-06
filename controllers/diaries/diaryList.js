@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
         condition,
 
         attributes: [
-            [sequelize.col("username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
             "type",
             "title",
             "weather",

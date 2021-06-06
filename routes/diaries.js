@@ -6,7 +6,8 @@ const {
     diary,
     diaryList,
     groupDiaryList,
-    trending
+    trending,
+    getGroup
 
 } = require('../controllers/diaries');
 
@@ -47,5 +48,7 @@ router.put("/diaries/:id", diary.put); // 선택한 일기 수정하기
 
 // * DELETE /diaries/:id
 router.delete("/diaries/:id", diary.delete) // 선택한 일기 삭제하기
+
+router.get("/getGroup", getGroup.get);
 
 module.exports = router;
