@@ -7,6 +7,7 @@ const app = express();
 const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
 const diaryRoutes = require('./routes/diaries');
+const mypageRoutes = require('./routes/books');
 
 require("dotenv").config();
 
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
     cors({
-        origin: true,
+        origin: ["http://localhost:3000", "https://www.picanote.me"],
         credentials: true,
         methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     })
@@ -30,6 +31,7 @@ app.use(
 
 app.use("/", userRoutes);
 app.use("/", diaryRoutes);
+app.use("/", mypageRoutes)
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 80;
 

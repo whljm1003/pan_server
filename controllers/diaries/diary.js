@@ -30,7 +30,7 @@ module.exports = {
             title: title,
             weather: weather,
             content: content,
-            private: private,
+            // private: private, // 따로 메소드를 만들어야 됨
             picUrl: picUrl, //글 일기일 경우 => NULL로 자동 저장됨
             date: date,
             feelings: feelings,
@@ -41,24 +41,55 @@ module.exports = {
     get: async (req, res) => {
         //글 or 그림 일기 보기
         //GET/diaries/:id
+        const authorization = req.headers.authorization;
         const diaryId = req.params.id;
 
-        //일기 데이터가 존재하지 않을 경우
-        // if (Diary.dataValues === undefined) {
-        //     res.status(400).json({ message: '일기 내용을 불러올 수 없습니다. ' })
-        // }
+        //비로그인 회원도 볼 수 있음, private이 false인 일기만 볼 수 있음, main page용
+        if (!authorization) {
+            const diary = await Diary.findAll({
+                where: { id: diaryId, private: false },
+                attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                include: [{
+                    model: Like,
+                    required: false,
+                    attributes: []
+                }]
+            });
+            res.status(200).json({ data: diary, message: '선택한 일기 내용입니다.' });
+        } else {
+            //로그인 회원만 볼 수 있음(private이 true, false 상관없이 다 볼 수 있음), mypage용, 단 private=true인건 본인만 볼 수 있게.
+            const token = authorization.split(' ')[1];
+            const data = jwt.verify(token, process.env.ACCESS_SECRET);
 
-        //선택한 일기 데이터가 있을 경우
-        const diary = await Diary.findAll({
-            where: { id: diaryId },
-            attributes: ['title', 'weather', 'content',[sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl'],
-            include: [{
-                model: Like,
-                required : false,
-                attributes: []
-            }]
-        });
-        res.status(200).json({ data: diary, message: '선택한 일기 내용입니다. ' });
+            const diary = await Diary.findAll({
+                where: { id: diaryId },
+            });
+
+            if (diary[0].dataValues.private === false) {
+                const publicDiary = await Diary.findAll({
+                    where: { id: diaryId, private: false },
+                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    include: [{
+                        model: Like,
+                        required: false,
+                        attributes: []
+                    }]
+                });
+                res.status(200).json({ data: publicDiary, message: '선택한 일기 내용입니다.' }); //로그인했을 때 private=false일기 보기
+            } else if (diary[0].dataValues.private === true) {
+                const privateDiary = await Diary.findAll({
+                    where: { id: diaryId, userId: data.id },
+                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    include: [{
+                        model: Like,
+                        required: false,
+                        attributes: []
+                    }]
+                });
+                res.status(200).json({ data: privateDiary, message: '선택한 일기 내용입니다.' });//로그인했을 때 private-true인 본인 일기 보기
+            }
+            //    console.log(diary[0].dataValues.private)
+        }
     },
 
     put: async (req, res) => {
@@ -72,13 +103,13 @@ module.exports = {
         const diaryId = req.params.id;
         const { type, title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
 
-        //일기에 변경 사항이 없을 경우
-        if (title || type || date || content === Diary.dataValues) {
-            return res.status(400).json({ message: '변경된 사항이 없습니다. ' })
-        }
+        // //일기에 변경 사항이 없을 경우
+        // if (title || type || date || content === Diary.dataValues) {
+        //     return res.status(400).json({ message: '변경된 사항이 없습니다. ' })
+        // }
 
-        //항목을 제대로 입력하지 않았을 경우 
-        else if (!title || !type || !date || !content) {
+        // //항목을 제대로 입력하지 않았을 경우 
+        if (!title || !type || !date || !content) {
             return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
