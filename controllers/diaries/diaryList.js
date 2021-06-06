@@ -16,23 +16,26 @@ module.exports = async (req, res) => {
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findOne({ where: { id: data.id } });
-
+        
         if(userInfo){
             condition = {
                 [sequelize.Op.or]:[
                 {private: false}, //공개 일기이거나 
-                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
+                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.dataValues.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
              ]
             }
-        }condition = {private:false}
+        }else{
+            condition = {private:false}
+        }
     }
-   
     const diaryList = await Diary.findAll({
-        where: //{private: false},
-        condition,
+        where: condition,
 
         attributes: [
+            "id",
             [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            "bookId",
+            "userId",
             "type",
             "title",
             "weather",

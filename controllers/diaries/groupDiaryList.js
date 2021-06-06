@@ -21,8 +21,10 @@ module.exports = async (req, res) => {
                 {[sequelize.Op.and]: [{private:true}, {groupId : userInfo.id }]} //비공개이면서 해당 일기의 groupId가 로그인유저가 속한 그룹 목록에 있는 경우
              ]
             }
+    }else{
+        condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
     }
-    condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
+    
     const groupDiaryList = await Diary.findAll({
         where: {private:false},
         attributes: [
