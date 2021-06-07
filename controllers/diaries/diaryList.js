@@ -8,11 +8,10 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res) => {
    
     const authorization = req.headers.authorization;  
-
+    var condition = {}
     if(!authorization){
         condition = {private:false}
-    }
-    else{
+    }else{
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findOne({ where: { id: data.id } });

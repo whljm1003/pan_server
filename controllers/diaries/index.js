@@ -4,5 +4,4 @@ module.exports = {
     diaryList: require('./diaryList'),
     groupDiaryList: require('./groupDiaryList'),
     trending: require('./trending'),
-    getGroup: require('./getGroup')
 };
