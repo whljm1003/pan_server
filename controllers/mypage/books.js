@@ -49,11 +49,11 @@ module.exports = {
         //mypage에서 내가 생성한 개인일기장 목록 보기(로그인 회원만 볼 수 있음)
         const book = await Book.findAll({
             where: { userId: data.id },
-            attributes: ['userId', 'groupId', 'bookName', 'bookCover'],
+            attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
             include: [{
                 model: Diary,
                 required: false,
-                attributes: ['userId', 'bookId', 'type', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
+                attributes: ['id', 'userId', 'bookId', 'type', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
                 include: [{
                     model: Like,
                     required: false,
