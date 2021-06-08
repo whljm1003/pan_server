@@ -12,12 +12,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Group.belongsToMany(models.User, { through: 'Users_groups', foreignKey: 'groupId' }); //groups와 users 테이블의 관계 정의 (N:M) : 한 그룹에 여러 사용자가 속할 수 있고 한 사용자는 여러 그룹에 속할 수 있다.
+      models.Group.belongsToMany(models.User, { through: 'Users_groups'}); //groups와 users 테이블의 관계 정의 (N:M) : 한 그룹에 여러 사용자가 속할 수 있고 한 사용자는 여러 그룹에 속할 수 있다.
       models.Group.hasMany(models.Book, { foreignKey: 'groupId', sourceKey: 'id' }) // groups와 book 테이블의 관계 정의 (1:N) : 한 그룹이 여러 일기장을 가질 수 있다.
+      models.Group.belongsTo(models.User, {foreignKey: 'owner', souceKey: 'id' })
     }
   };
   Group.init({
-    groupName: DataTypes.STRING
+    groupName: DataTypes.STRING,
+    owner:DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Group',

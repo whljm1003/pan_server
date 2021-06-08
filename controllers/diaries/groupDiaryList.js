@@ -2,35 +2,69 @@
 //그룹에서 작성한 공개 다이어리 목록입니다.
 //로그인 상태인 경우 내가 속한 그룹의 비공개 일기도 볼 수 있습니다.
 const sequelize = require("sequelize")
-const { Diary,User,Book,Like,Comment } = require( '../../models');
+const { Diary,User,Book,Like,Comment,Users_groups } = require( '../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
-    //로그인한 유저가 해당 그룹에 속한 사용자일 경우 비공개 일기도 보여줘야 하는데 어떻게 하지?
+   // 로그인한 유저가 해당 그룹에 속한 사용자일 경우 비공개 일기도 보여줘야 하는데 어떻게 하지?
     const authorization = req.headers.authorization;
-    const token = authorization.split(' ')[1];
-    const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    const userInfo = await User.findOne({ where: { id: data.id } });
-    
-    const condition = {}
+    var condition = {}
+    //로그인 상태가 아닐 경우
+    if(!authorization){
+        condition = {private:false}
+    }else{ //로그인한 경우
+        const token = authorization.split(' ')[1];
+        const data = jwt.verify(token, process.env.ACCESS_SECRET);
+        const userInfo = await User.findOne({
+            where: {id: data.id}
+        })
+        //로그인한 유저가 속한 그룹의 목록을 배열에 담는다.
+        const myGroupList = await Users_groups.findAll({
+            where: {userId:data.id}
+        }).then(arr => arr.map(el => el.groupId))
+       // console.log(myGroupList);
 
-    if(userInfo){   
-        condition = { 
-            [sequelize.Op.or]:[
-                {private: false}, 
-                {[sequelize.Op.and]: [{private:true}, {groupId : userInfo.id }]} //비공개이면서 해당 일기의 groupId가 로그인유저가 속한 그룹 목록에 있는 경우
-             ]
-            }
+        //로그인한 유저가 권한을 가지는 일기장의 목록을 배열에 담는다.
+        const bookList = await Book.findAll({
+        where: {[sequelize.Op.or]: [
+            {userId : data.id }, // 내가 생성한 일기장이거나
+            {groupId : {[sequelize.Op.in]: myGroupList}} // 내가 속한 그룹이 생성한 일기장이거나
+        ]}
+        
+        }) // 조건에 맞는 book 테이블 레코드를 필터링한다
+        .then(arr => arr.map(el => el.id)) // 그 중 bookId만 배열에 담는다.
+
+        console.log(myGroupList);
+        console.log(bookList)
+        if(userInfo){   
+            condition = { 
+                [sequelize.Op.or]:[
+                    {private: false}, 
+                    {[sequelize.Op.and]: [{private:true}, {bookId: {[sequelize.Op.in]:bookList}}]} //비공개이면서 해당 일기의 groupId가 로그인유저가 속한 그룹 목록에 있는 경우
+                 ]
+                }
+        }else{
+            condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
+        }
     }
-    condition = {private:false} // 유저 정보가 일치하지 않으면 공개 일기만 포함한다.
+
+    
     const groupDiaryList = await Diary.findAll({
-        where: {private:false},
+        where: condition,
         attributes: [
-            [sequelize.col("username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
-            [sequelize.col("groupId"), "group"], 
+            "id",
+            "userId",
+            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            "bookId", 
+            [sequelize.col("groupId"), "groupId"],
+            "type",
             "title",
             "weather",
             "content",
+            "private",
+            "picUrl",
+            "date",
+            "feelings",
             [sequelize.col("like"), "like"],
             "createdAt",
             "updatedAt"   
@@ -39,16 +73,10 @@ module.exports = async (req, res) => {
             {
                 model: User,
                 attributes:[],
-                include : [
-                    {
-                        model: Users-groups,
-                        attributes: []
-                    }
-                ]
             },
              {
                 model: Book,
-                where: { groupId : {[sequelize.Op.ne]: null} },   //그룹일기
+                where: { groupId : {[sequelize.Op.not]: null,} },   //그룹일기
                 attributes: []
             },
             {
@@ -58,15 +86,15 @@ module.exports = async (req, res) => {
             },
             {
                 model: Comment,
-                required: true,
+               // required: false,
                 attributes: [
                     "userId", // should be changed to [sequelize.col("username"), "username"]
-                    "comments"                    
+                    "text"                    
                 ],
                 order: [ ['createdAt', 'DESC']]
             }
         ],
-        order: ["createdAt"]
+        order:[ ['createdAt', 'DESC'] ],
     })
-    res.status(200).json({data: groupDiaryList, message:'공개된 개인 일기의 목록입니다.'})
+    res.status(200).json({data: groupDiaryList, message:'공개된 그룹 일기의 목록입니다.'})
 }

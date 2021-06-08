@@ -6,7 +6,7 @@ const {
     diary,
     diaryList,
     groupDiaryList,
-    trending
+    trending,
 
 } = require('../controllers/diaries');
 

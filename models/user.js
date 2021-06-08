@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       models.User.hasMany(models.Comment, { foreignKey: 'userId', sourceKey: 'id' });  //users와 comments 테이블의 관계 정의 (1:N)
       models.User.hasMany(models.Diary, { foreignKey: 'userId', sourceKey: 'id' }); //users와 diaries 테이블의 관계 정의 (1:N)
-      models.User.belongsToMany(models.Group, { through: 'Users_groups', foreignKey: 'userId' }); //users와 groups 테이블의 관계 정의 (N:M)
+      models.User.belongsToMany(models.Group, { through: 'Users_groups'}); //users와 groups 테이블의 관계 정의 (N:M)
       models.User.hasMany(models.Like, { foreignKey: 'userId' }) //users와 likes 테이블은 1:N(한 명의 유저는 여러 개의 좋아요를 누를 수 있음)
       models.User.hasMany(models.Book, { foreignKey: 'userId', sourceKey: 'id' }) //한 명의 유저는 여러 개의 일기장을 가질 수 있음.
+      models.User.hasMany(models.Group, { foreignKey: 'owner', sourceKey: 'id'})
+      models.User.hasMany(models.Users_groups, { foreignKey: 'userId', sourceKey: 'id'})
     }
   };
   User.init({
