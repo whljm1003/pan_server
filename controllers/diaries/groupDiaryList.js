@@ -15,30 +15,32 @@ module.exports = async (req, res) => {
     }else{ //로그인한 경우
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
-        const userInfo = await User.findOne({ 
-            where: { id: data.id },
-            attributes: [
-                "id",
-                "userName",
-                "email",
-            ],
-            include: [
-                {
-                    model: Users_groups,
-                    //required:true,
-                    attributes: [
-                        "groupId"
-                    ]
-                }
-            ]
-        });
-        console.log(userInfo)
-        console.log(userInfo.dataValues.Users_groups) // 그룹 더 만들어서 테스트해보기
+        const userInfo = await User.findOne({
+            where: {id: data.id}
+        })
+        //로그인한 유저가 속한 그룹의 목록을 배열에 담는다.
+        const myGroupList = await Users_groups.findAll({
+            where: {userId:data.id}
+        }).then(arr => arr.map(el => el.groupId))
+       // console.log(myGroupList);
+
+        //로그인한 유저가 권한을 가지는 일기장의 목록을 배열에 담는다.
+        const bookList = await Book.findAll({
+        where: {[sequelize.Op.or]: [
+            {userId : data.id }, // 내가 생성한 일기장이거나
+            {groupId : {[sequelize.Op.in]: myGroupList}} // 내가 속한 그룹이 생성한 일기장이거나
+        ]}
+        
+        }) // 조건에 맞는 book 테이블 레코드를 필터링한다
+        .then(arr => arr.map(el => el.id)) // 그 중 bookId만 배열에 담는다.
+
+        console.log(myGroupList);
+        console.log(bookList)
         if(userInfo){   
             condition = { 
                 [sequelize.Op.or]:[
                     {private: false}, 
-                    {[sequelize.Op.and]: [{private:true}, {groupId : userInfo.id }]} //비공개이면서 해당 일기의 groupId가 로그인유저가 속한 그룹 목록에 있는 경우
+                    {[sequelize.Op.and]: [{private:true}, {bookId: {[sequelize.Op.in]:bookList}}]} //비공개이면서 해당 일기의 groupId가 로그인유저가 속한 그룹 목록에 있는 경우
                  ]
                 }
         }else{
@@ -50,13 +52,20 @@ module.exports = async (req, res) => {
     const groupDiaryList = await Diary.findAll({
         where: condition,
         attributes: [
+            "id",
+            "userId",
             [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
-            [sequelize.col("bookId"), "bookId"], 
+            "bookId", 
             [sequelize.col("groupId"), "groupId"],
+            "type",
             "title",
             "weather",
             "content",
-           // [sequelize.col("like"), "like"],
+            "private",
+            "picUrl",
+            "date",
+            "feelings",
+            [sequelize.col("like"), "like"],
             "createdAt",
             "updatedAt"   
         ],
@@ -70,22 +79,22 @@ module.exports = async (req, res) => {
                 where: { groupId : {[sequelize.Op.not]: null,} },   //그룹일기
                 attributes: []
             },
-        //     // {
-        //     //     model: Like,
-        //     //     required: false,
-        //     //     attributes: []
-        //     // },
-        //     // {
-        //     //     model: Comment,
-        //     //     required: false,
-        //     //     attributes: [
-        //     //         "userId", // should be changed to [sequelize.col("username"), "username"]
-        //     //         "text"                    
-        //     //     ],
-        //     //     order: [ ['createdAt', 'DESC']]
-        //     // }
+            {
+                model: Like,
+                required: false,
+                attributes: []
+            },
+            {
+                model: Comment,
+               // required: false,
+                attributes: [
+                    "userId", // should be changed to [sequelize.col("username"), "username"]
+                    "text"                    
+                ],
+                order: [ ['createdAt', 'DESC']]
+            }
         ],
-        // order: ["createdAt"]
+        order:[ ['createdAt', 'DESC'] ],
     })
     res.status(200).json({data: groupDiaryList, message:'공개된 그룹 일기의 목록입니다.'})
 }

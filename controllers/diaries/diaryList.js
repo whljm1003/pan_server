@@ -32,9 +32,10 @@ module.exports = async (req, res) => {
 
         attributes: [
             "id",
-            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
-            "bookId",
             "userId",
+            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            "bookId",   
+            [sequelize.col("groupId"), "groupId"],
             "type",
             "title",
             "weather",
@@ -49,15 +50,16 @@ module.exports = async (req, res) => {
         ],
         include: [
             {
+                model: Book,
+                where: { groupId : {[sequelize.Op.is]: null,} },    //개인일기로 필터링이 왜 안 되지...
+                attributes: []
+            },
+            {
                 model: User,
                 required: false,
                 attributes:[]   //고민: 위에 attributes를 비우고 여기에 username을 넣으면 Diaries 테이블의 모든 컬럼을 포함하지만 username의 경우 User 컬럼 안에 객체로 들어가게 됨.
             },
-             {
-                model: Book,
-                //where: { groupId :null},   //개인일기
-                attributes: []
-            },
+
             {
                 model: Like,
                 required: false,
@@ -65,7 +67,6 @@ module.exports = async (req, res) => {
             },
             {
                 model: Comment,
-                required: false,
                 attributes: [
                     "userId", // should be changed to [sequelize.col("username"), "username"]
                     "text"                    
