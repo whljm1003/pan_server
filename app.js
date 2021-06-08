@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
     cors({
-        origin: ["http://localhost:3000", "https://www.picanote.me"],
+        origin: true, //["http://localhost:3000", "https://www.picanote.me"],
         credentials: true,
         methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     })
