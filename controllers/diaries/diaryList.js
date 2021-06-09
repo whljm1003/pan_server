@@ -8,32 +8,38 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res) => {
    
     const authorization = req.headers.authorization;  
-
+    var condition = {}
     if(!authorization){
         condition = {private:false}
-    }
-    else{
+    }else{
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findOne({ where: { id: data.id } });
-
+        
         if(userInfo){
             condition = {
                 [sequelize.Op.or]:[
                 {private: false}, //공개 일기이거나 
-                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
+                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.dataValues.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
              ]
             }
-        }condition = {private:false}
+        }else{
+            condition = {private:false}
+        }
     }
-   
     const diaryList = await Diary.findAll({
-        where: //{private: false},
-        condition,
+        where: condition,
 
         attributes: [
             "id",
+<<<<<<< HEAD
             [sequelize.col("username"), "writer"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+=======
+            "userId",
+            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            "bookId",   
+            [sequelize.col("groupId"), "groupId"],
+>>>>>>> 238062d95f0ae55b73a038f20fca5fd4e9ed89ba
             "type",
             "title",
             "weather",
@@ -48,15 +54,16 @@ module.exports = async (req, res) => {
         ],
         include: [
             {
+                model: Book,
+                where: { groupId : {[sequelize.Op.is]: null,} },    //개인일기로 필터링이 왜 안 되지...
+                attributes: []
+            },
+            {
                 model: User,
                 required: false,
                 attributes:[]   //고민: 위에 attributes를 비우고 여기에 username을 넣으면 Diaries 테이블의 모든 컬럼을 포함하지만 username의 경우 User 컬럼 안에 객체로 들어가게 됨.
             },
-             {
-                model: Book,
-                //where: { groupId :null},   //개인일기
-                attributes: []
-            },
+
             {
                 model: Like,
                 required: false,
@@ -64,7 +71,6 @@ module.exports = async (req, res) => {
             },
             {
                 model: Comment,
-                required: false,
                 attributes: [
                     "userId", // should be changed to [sequelize.col("username"), "username"]
                     "text"                    

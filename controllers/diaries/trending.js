@@ -9,7 +9,10 @@ module.exports = {
         const trending = await Diary.findAll({
             where: { private: false },
             attributes: [
-                [sequelize.col("username"), "writer"],
+                "id",
+                "userId",
+                [sequelize.col("username"), "username"],
+                "bookId",
                 "type",
                 "title",
                 "weather",
