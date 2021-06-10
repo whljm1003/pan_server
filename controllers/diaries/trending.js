@@ -13,6 +13,7 @@ module.exports = {
                 "userId",
                 [sequelize.col("username"), "username"],
                 "bookId",
+                [sequelize.col("groupId"), "groupId"],
                 "type",
                 "title",
                 "weather",
@@ -41,7 +42,7 @@ module.exports = {
                     required: true,
                     attributes: [
                         "userId", // should be changed to [sequelize.col("username"), "username"]
-                        "comments"                    
+                        "text"                    
                     ],
                     order: [ ['createdAt', 'DESC']]
                 }

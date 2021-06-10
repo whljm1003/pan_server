@@ -1,34 +1,12 @@
 //작성자:김현영
-//개인이 작성한 공개 다이어리 목록입니다.
-//로그인 상태인 경우 로그인한 사용자의 비밀일기까지 보여줍니다 - 나중에
+//메인페이지에 활용할 개인이 작성한 공개 다이어리 목록입니다.
 const sequelize = require("sequelize")
 const { Diary,User,Book,Like,Comment } = require( '../../models');
-const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
-   
-    const authorization = req.headers.authorization;  
-    var condition = {}
-    if(!authorization){
-        condition = {private:false}
-    }else{
-        const token = authorization.split(' ')[1];
-        const data = jwt.verify(token, process.env.ACCESS_SECRET);
-        const userInfo = await User.findOne({ where: { id: data.id } });
-        
-        if(userInfo){
-            condition = {
-                [sequelize.Op.or]:[
-                {private: false}, //공개 일기이거나 
-                {[sequelize.Op.and]: [{private:true}, {userId : userInfo.dataValues.id }]} // 비공개일기지만 유저 아이디가 일치하는 일기를 condition에 값으로 넣는다.
-             ]
-            }
-        }else{
-            condition = {private:false}
-        }
-    }
+
     const diaryList = await Diary.findAll({
-        where: condition,
+        where: { private:false },
 
         attributes: [
             "id",
@@ -51,18 +29,16 @@ module.exports = async (req, res) => {
         include: [
             {
                 model: Book,
-                where: { groupId : {[sequelize.Op.is]: null,} },    //개인일기로 필터링이 왜 안 되지...
+                where: { groupId : {[sequelize.Op.is]: null,} },    //include절이 where절을 포함할 경우 required는 true가 된다.(즉, inner join이 되므로 groupId가 null인 다이어리 목록만 필터링한다.)
                 attributes: []
             },
             {
                 model: User,
-                required: false,
-                attributes:[]   //고민: 위에 attributes를 비우고 여기에 username을 넣으면 Diaries 테이블의 모든 컬럼을 포함하지만 username의 경우 User 컬럼 안에 객체로 들어가게 됨.
+                attributes:[]  
             },
 
             {
                 model: Like,
-                required: false,
                 attributes: []
             },
             {
