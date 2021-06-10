@@ -7,7 +7,7 @@ const {
     diaryList,
     groupDiaryList,
     trending,
-
+    search
 } = require('../controllers/diaries');
 
 // * POST /diaries/upload
@@ -47,5 +47,8 @@ router.put("/diaries/:id", diary.put); // 선택한 일기 수정하기
 
 // * DELETE /diaries/:id
 router.delete("/diaries/:id", diary.delete) // 선택한 일기 삭제하기
+
+// * GET/search
+router.get("/search", search) // 일기 내용 검색하기
 
 module.exports = router;

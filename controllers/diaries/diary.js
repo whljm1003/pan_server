@@ -1,6 +1,6 @@
 //작성자:문지영
 const sequelize = require("sequelize");
-const { User, Diary, Like } = require('../../models');
+const { User, Diary, Like, Comment } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -48,12 +48,23 @@ module.exports = {
         if (!authorization) {
             const diary = await Diary.findAll({
                 where: { id: diaryId, private: false },
-                attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
                 include: [{
                     model: Like,
                     required: false,
                     attributes: []
-                }]
+                },
+                {
+                    model: User,
+                    required: false,
+                    attributes: []
+                },
+                {
+                    model: Comment,
+                    required: false,
+                    attributes: []
+                }
+                ]
             });
             res.status(200).json({ data: diary, message: '선택한 일기 내용입니다.' });
         } else {
@@ -68,9 +79,19 @@ module.exports = {
             if (diary[0].dataValues.private === false) {
                 const publicDiary = await Diary.findAll({
                     where: { id: diaryId, private: false },
-                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
                     include: [{
                         model: Like,
+                        required: false,
+                        attributes: []
+                    },
+                    {
+                        model: User,
+                        required: false,
+                        attributes: []
+                    },
+                    {
+                        model: Comment,
                         required: false,
                         attributes: []
                     }]
@@ -79,9 +100,19 @@ module.exports = {
             } else if (diary[0].dataValues.private === true) {
                 const privateDiary = await Diary.findAll({
                     where: { id: diaryId, userId: data.id },
-                    attributes: ['title', 'weather', 'content', [sequelize.col("like"), "like"], 'date', 'feelings', 'picUrl', 'private', 'userId'],
+                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
                     include: [{
                         model: Like,
+                        required: false,
+                        attributes: []
+                    },
+                    {
+                        model: User,
+                        required: false,
+                        attributes: []
+                    },
+                    {
+                        model: Comment,
                         required: false,
                         attributes: []
                     }]
