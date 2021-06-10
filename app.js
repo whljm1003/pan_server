@@ -8,6 +8,7 @@ const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
 const diaryRoutes = require('./routes/diaries');
 const mypageRoutes = require('./routes/books');
+const profileRoutes = require('./routes/profile');
 
 require("dotenv").config();
 
@@ -31,7 +32,8 @@ app.use(
 
 app.use("/", userRoutes);
 app.use("/", diaryRoutes);
-app.use("/", mypageRoutes)
+app.use("/", mypageRoutes);
+app.use("/", profileRoutes);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 80;
 
