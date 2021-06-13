@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Users_groups.belongsTo(models.User, {
-        foreignKey: 'userId'
+        TargetKey: 'id'
       })
 
       Users_groups.belongsTo(models.Group, {
-        foreignKey: 'groupId'
+        TargetKey: 'id'
       })
     }
   };

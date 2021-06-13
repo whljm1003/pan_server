@@ -32,6 +32,7 @@ module.exports = {
         res.status(200).json({ message: '개인 일기장이 생성되었습니다.' })
 
         //그룹 일기장 생성(groupId가 있을 때), //user가 group에 속해있으면 groupdId가 있음
+        // 1.로그인한 유저가 그룹일기장을 만들 때 그룹 만들기 클릭 => 그룹일기장의 id, userId, groupId, bookName, bookCover + 로그인 유저 id(owner)를 가져와서 그룹 일기장 생성
     },
 
     get: async (req, res) => {

@@ -6,7 +6,8 @@ const {
   accessToken,
   refreshToken,
   signup,
-  withdrawal
+  withdrawal,
+  userGroup
 } = require('../controllers/users');
 
 // * POST /users/login
@@ -19,5 +20,9 @@ router.get('/refreshToken', refreshToken);
 router.post('/signup', signup);
 // * DELETE /withdrawal
 router.delete('/withdrawal', withdrawal);
+// * POST /users/user-group
+router.post('/user-group', userGroup.sendMail);
+// * GET /invite/?token
+router.get('/invite', userGroup.createGroup);
 
 module.exports = router;
