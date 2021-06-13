@@ -12,7 +12,6 @@ module.exports = {
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findByPk(data.id)
         const { diaryId }= req.params
-
         const { text } = req.body;
         if(!userInfo){
             return res.status(400).json({ message: '로그인 해 주세요!'})
