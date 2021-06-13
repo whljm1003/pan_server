@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    books
+    books,
+    myBook,
+    myGroupBook
 } = require('../controllers/mypage');
 
 // * POST/mypage/books
@@ -16,5 +18,11 @@ router.put("/books/:id", books.put);
 
 // * DELETE/mypage/books/:id
 router.delete("/books/:id", books.delete);
+
+// * GET/myBook
+router.get("/myBook", myBook);
+
+// * GET/mygroupBook
+router.get("/myGroupBook", myGroupBook)
 
 module.exports = router;
