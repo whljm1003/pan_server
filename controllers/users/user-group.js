@@ -15,7 +15,7 @@ module.exports = {
         // 1.로그인한 유저가 그룹일기장을 만들 때 먼저 그룹 만들기 클릭 => 그룹일기장의 id, userId, groupId, bookName, bookCover + 로그인 유저 id(owner)를 가져와서 그룹 일기장 생성
         // 1번은 books.js로 가야하나?
 
-        // 2.회원 중에서 초대하고 싶은 유저 선택(최대 2명) => 그룹 생성하기 버튼 클릭
+        // 2.회원 중에서 초대하고 싶은 유저 선택(최대 2명) => 그룹 생성하기 버튼 클릭 (owner가 포함된 group이 일단 만들어지는 것과 메일 발송이 동시에)
         const { id, email, groupId } = req.body
         const inviteToken = jwt.sign({ id, email, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // token 생성, 여기서 token을 저장해놓을 곳이 필요할듯??
         // const userInfo = await User.findOne({ where: { email: email }})
