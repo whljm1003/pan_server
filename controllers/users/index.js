@@ -4,6 +4,7 @@ module.exports = {
     accessToken: require('./accessToken'),
     refreshToken: require('./refreshToken'),
     signup: require('./signup'),
-    withdrawal: require('./withdrawal')
-
+    withdrawal: require('./withdrawal'),
+    userGroup: require('./user-group')
+    
 };
