@@ -15,7 +15,7 @@ module.exports = {
     username: "pan",
     password: process.env.DATABASE_PASSWORD,
     database: "pan",
-    host: "pan-server-deploy.cx3gvleqjatg.ap-northeast-2.rds.amazonaws.com",
+    host: process.env.DATABASE_HOST,
     dialect: "mysql",
     port: '13306'
   }
