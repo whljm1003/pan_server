@@ -100,5 +100,4 @@ module.exports = {
         })
         res.status(201).json({ message: '그룹에 초대되었습니다.' })
     }
-
 }
