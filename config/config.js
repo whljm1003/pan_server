@@ -11,7 +11,7 @@ module.exports = {
   },
 
   production: {
-    username: "pan",
+    username: "root",
     password: process.env.DATABASE_PASSWORD,
     database: "pan",
     host: process.env.DATABASE_HOST,

@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
     cors({
-        origin: ["http://localhost:3000", "https://picanote.me"],
+        origin: ["http://localhost:3000", "https://picanote.me", "https://www.picanote.me"],
         credentials: true,
         methods: ["GET", "POST", "DELETE", "PUT"],
     })
@@ -37,7 +37,7 @@ app.use("/", mypageRoutes);
 app.use("/", profileRoutes);
 app.use("/", commentRoutes);
 
-const HTTPS_PORT = process.env.HTTPS_PORT || 80;
+const HTTPS_PORT = process.env.HTTPS_PORT || 5000;
 
 let server = app.listen(HTTPS_PORT)
 
