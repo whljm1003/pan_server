@@ -7,7 +7,7 @@ const {
     diaryList,
     groupDiaryList,
     trending,
-    search
+    search,
 } = require('../controllers/diaries');
 
 // * POST /diaries/upload
