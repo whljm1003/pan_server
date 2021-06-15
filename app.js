@@ -7,7 +7,7 @@ const app = express();
 const models = require("./models/index.js");
 const userRoutes = require('./routes/users');
 const diaryRoutes = require('./routes/diaries');
-const mypageRoutes = require('./routes/books');
+const mypageRoutes = require('./routes/mypage');
 const profileRoutes = require('./routes/profile');
 const commentRoutes = require('./routes/comments');
 

@@ -4,7 +4,8 @@ const router = express.Router();
 const {
     books,
     myBook,
-    myGroupBook
+    myGroupBook,
+    private
 } = require('../controllers/mypage');
 
 // * POST/mypage/books
@@ -23,6 +24,9 @@ router.delete("/books/:id", books.delete);
 router.get("/myBook", myBook);
 
 // * GET/mygroupBook
-router.get("/myGroupBook", myGroupBook)
+router.get("/myGroupBook", myGroupBook);
+
+// * POST/diaries/:id/private
+router.post("/diaries/:id/private", private.post); // 선택한 일기 공개,비공개 전환
 
 module.exports = router;
