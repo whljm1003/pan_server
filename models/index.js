@@ -1,4 +1,3 @@
-//작성자:김현영
 'use strict';
 
 const fs = require('fs');
