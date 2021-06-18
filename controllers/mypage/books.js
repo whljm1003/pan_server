@@ -126,6 +126,9 @@ module.exports = {
 
         // 로그인 한 유저와 일기장을 만든 유저가 같을 경우, 즉 나는 내 일기장만 삭제할 수 있음.
         else if (book.dataValues.userId === userInfo.id) {
+            Diary.destroy({
+                where: { userId: userInfo.id, bookId: bookId }
+            })
             Book.destroy({
                 where: { id: bookId }
             })
