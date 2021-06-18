@@ -5,6 +5,5 @@ module.exports = {
     refreshToken: require('./refreshToken'),
     signup: require('./signup'),
     withdrawal: require('./withdrawal'),
-    userGroup: require('./user-group')
-    
+    userGroup: require('./user-group'),
 };

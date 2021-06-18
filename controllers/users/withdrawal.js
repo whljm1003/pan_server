@@ -1,8 +1,8 @@
 //작성자:김현영
-const { User } = require('../../models');
+const { User, Diary, Book } = require('../../models');
 const jwt = require('jsonwebtoken');
 
-module.exports = async (req, res) => {  
+module.exports = async (req, res) => {
 
     /* 회원탈퇴 요청을 받았을 때
         -요청 헤더에 담긴 토큰이 유효하지 않으면 에러메세지를 전송한다.
@@ -11,12 +11,21 @@ module.exports = async (req, res) => {
     */
 
     const auth = req.headers.authorization; // 토큰은 요청의 헤더에 담겨져 전송된다. authorization : <typ><credential>
-    if(auth === undefined){
+    if (auth === undefined) {
         res.status(401).send('권한이 유효하지 않습니다.')
     }
     const token = auth.split(' ')[1]    // 헤더의 authorization에는 bearer 이라고 타입이 포함되어 있으므로 split 해서 사용해야 한다. (jwt, Oauth의 경우 타입으로 Bearer을 사용한다.)
     const verifiedToken = jwt.verify(token, process.env.ACCESS_SECRET);
     const { id } = verifiedToken;
+
+    //데이터 삭제 추가 (다이어리 => 북)
+    await Diary.destroy({
+        where: { id: verifiedToken.id }
+    });
+
+    await Book.destroy({
+        where: { id: verifiedToken.id }
+    });
 
     await User.destroy({
         where: { id }
