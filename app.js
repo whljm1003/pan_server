@@ -10,6 +10,7 @@ const diaryRoutes = require('./routes/diaries');
 const mypageRoutes = require('./routes/mypage');
 const profileRoutes = require('./routes/profile');
 const commentRoutes = require('./routes/comments');
+const findIdAndPwdRoutes = require('./routes/findIdAndPwd')
 
 require("dotenv").config();
 
@@ -36,6 +37,7 @@ app.use("/", diaryRoutes);
 app.use("/", mypageRoutes);
 app.use("/", profileRoutes);
 app.use("/", commentRoutes);
+app.use("/", findIdAndPwdRoutes);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 5000;
 
