@@ -30,20 +30,20 @@ module.exports = {
 
         const userInfo = await User.findAll({
             where: { email: email },
-            attributes: ['id']
+            attributes: ['id', 'email']
         })
         // .then(arr => arr.map(el => el.dataValues.id))
 
         // const userId = userInfo.join()
         // const userId = userInfo[0]// email 초대하려는 사람의 userId(가입된 유저들만 초대 가능).
-        // console.log('UserId', userId)
+        console.log('USERINFO', userInfo)
         const groupId = groupInfo.dataValues.id // email 초대하려는 groupd의 id, 위에서 그룹 만들 때 생성된 id.
+        const userId = userInfo[0].id
 
         // console.log('UserInfo', userInfo)
         // console.log(email[0])
 
         if (userInfo.length === 1) {
-            const userId = userInfo[0].id
             const inviteTokenFirst = jwt.sign({ userId, email, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
             const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
             console.log("inviteData", inviteDataFirst)
@@ -94,15 +94,16 @@ module.exports = {
         } else if (userInfo.length === 2) {
             const email1 = email[0]
             const userId1 = userInfo[0].id
-            const inviteTokenFirst = jwt.sign({ userId1, email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
+            const inviteTokenFirst = jwt.sign({ userId: userId1, email: email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
             const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
             console.log("inviteDataFirst", inviteDataFirst)
 
             const email2 = email[1]
             const userId2 = userInfo[1].id
-            const inviteTokenSecond = jwt.sign({ userId2, email2, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' })
+            const inviteTokenSecond = jwt.sign({ userId: userId2, email: email2, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' })
             const inviteDataSecond = jwt.verify(inviteTokenSecond, process.env.ACCESS_SECRET)
             console.log("inviteDataSecond", inviteDataSecond)
+            console.log(email)
 
 
             async function main() {
