@@ -10,7 +10,8 @@ const diaryRoutes = require('./routes/diaries');
 const mypageRoutes = require('./routes/mypage');
 const profileRoutes = require('./routes/profile');
 const commentRoutes = require('./routes/comments');
-const findIdAndPwdRoutes = require('./routes/findIdAndPwd')
+const findIdAndPwdRoutes = require('./routes/findIdAndPwd');
+const socialLoginRoutes = require('./routes/socialLogin');
 
 require("dotenv").config();
 
@@ -38,6 +39,7 @@ app.use("/", mypageRoutes);
 app.use("/", profileRoutes);
 app.use("/", commentRoutes);
 app.use("/", findIdAndPwdRoutes);
+app.use("/", socialLoginRoutes);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 5000;
 
