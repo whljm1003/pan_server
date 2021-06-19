@@ -20,7 +20,7 @@ module.exports = {
         //여기서 picUrl은 이미지 업로드 후 picUrl value를 받아온 값을 넣기 때문에 req.body로 요청
 
         if (!title || !date || !content) {
-            return res.status(400).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
+            return res.status(400).json({ message: '제목, 날짜, 내용을 입력해주세요.' })
         }
 
         Diary.create({
@@ -140,7 +140,7 @@ module.exports = {
 
         // //항목을 제대로 입력하지 않았을 경우 
         if (!title || !date || !content) {
-            return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
+            return res.status(401).json({ message: '제목, 날짜, 내용을 입력해주세요.' })
         }
 
         //수정할 때는 내가 내 일기만 수정할 수 있도록, 내가 다른 사람의 일기를 수정할 수 있게 되면 안됨.
