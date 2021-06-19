@@ -27,11 +27,12 @@ module.exports = {
                     pass: "590788b48efe75",
                 },
             });
+            const url = `http://localhost:80/reset/${token}`;
             const emailOptions = {
                 from: "groupdiary@picanote.com",
                 to: email,
                 subject: 'picanote 비밀번호 초기화 이메일입니다.',
-                html: '비밀번호 초기화를 위해 아래 URL을 클릭해 주세요.' + `http://localhost:80/reset/${token}`
+                html: '비밀번호 초기화를 위해 아래 URL을 클릭해 주세요.' + '<a href=' + url + '>초대링크</a>'
             };
             transporter.sendMail(emailOptions);
             res.status(200).json({message: '비밀번호 초기화를 위한 링크가 전송되었습니다.'})
