@@ -16,17 +16,16 @@ module.exports = {
 
         // 아니면 나눌 것이 아니라, form data가 있으면 자동으로 저장되고, 없으면 알아서 null 값으로 저장됨.
 
-        const { type, title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
+        const { title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
         //여기서 picUrl은 이미지 업로드 후 picUrl value를 받아온 값을 넣기 때문에 req.body로 요청
 
-        if (!title || !type || !date || !content) {
+        if (!title || !date || !content) {
             return res.status(400).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
         Diary.create({
             userId: userInfo.dataValues.id, // userId가 없으면 Null로 저장되므로, 어떤 사용자가 작성한지 알기위해 있어야 함.
             bookId: bookId,
-            type: type,
             title: title,
             weather: weather,
             content: content,
@@ -132,7 +131,7 @@ module.exports = {
 
         const userInfo = await User.findOne({ where: { id: data.id } });
         const diaryId = req.params.id;
-        const { type, title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
+        const { title, weather, content, private, date, feelings, picUrl, bookId } = req.body;
 
         // //일기에 변경 사항이 없을 경우
         // if (title || type || date || content === Diary.dataValues) {
@@ -140,7 +139,7 @@ module.exports = {
         // }
 
         // //항목을 제대로 입력하지 않았을 경우 
-        if (!title || !type || !date || !content) {
+        if (!title || !date || !content) {
             return res.status(401).json({ message: '제목, 유형, 날짜, 내용을 입력해주세요.' })
         }
 
@@ -160,7 +159,6 @@ module.exports = {
             Diary.update({
                 userId: userInfo.dataValues.id,
                 bookId: bookId,
-                type: type,
                 title: title,
                 weather: weather,
                 content: content,
