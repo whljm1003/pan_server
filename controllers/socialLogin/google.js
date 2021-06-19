@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
       `https://www.googleapis.com/oauth2/v2/userinfo/?access_token=${accessToken}`
     );
     const { id, email, picture } = googleData.data;
-
+    const username = email.split('@')[0]
    //google에서 받아온 id로 db에서 유저 정보를 찾는다.
    const existingUser = await User.findOne({where : { socialLoginId : id}});
 
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
            socialLoginId: id
        },
        defaults: {
-           username: email, // should be changed. *******
+           username: username,
            email: email,
            profileUrl: picture
        }
