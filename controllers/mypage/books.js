@@ -54,7 +54,7 @@ module.exports = {
             include: [{
                 model: Diary,
                 required: false,
-                attributes: ['id', 'userId', 'bookId', 'type', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
+                attributes: ['id', 'userId', 'bookId', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
                 include: [{
                     model: Like,
                     required: false,
