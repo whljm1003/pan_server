@@ -33,143 +33,158 @@ module.exports = {
         const groupId = groupInfo.dataValues.id // email 초대하려는 group의 id, 위에서 그룹 만들 때 생성된 id.
 
         // 그룹 초대할 사람이 1명일 때
-        try {
-            if (userInfo.length === 1) {
-                const userId = userInfo[0].id // email 초대하려는 사람의 userId(가입된 유저들만 초대 가능).
-                const email1 = email[0]
-                const inviteTokenFirst = jwt.sign({ userId, email: email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
-                const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
-                console.log("inviteData", inviteDataFirst)
-
-                async function main() {
-                    // 3.선택한 유저들에게 초대 메일 발송
-                    // 테스트용(mailtrap.io, 실제 전송은 안됨)
-                    // create reusable transporter object using the default SMTP transport
-                    const { email } = req.body
-                    const transporter = nodemailer.createTransport({
-                        host: "smtp.mailtrap.io",
-                        port: 2525,
-                        secure: false, // true for 465, false for other ports
-                        auth: {
-                            user: "44dbe1cbc3bed6",
-                            pass: "590788b48efe75",
-                        },
-                    });
-                    // gmail smtp이용(실제 전송 됨)
-                    // const transporter = nodemailer.createTransport({
-                    //     service: 'gmail',
-                    //     host: 'smtp.gmail.com',
-                    //     port: 587,
-                    //     secure: false,
-                    //     auth: {
-                    //       user: process.env.NODEMAILER_USER,
-                    //       pass: process.env.NODEMAILER_PASS
-                    //     }
-                    //   });
-                    const url = `http://localhost:5000/invite/?token=${inviteTokenFirst}` 
-                    //배포 클라이언트 주소로 바꾸기
-
-                    // 메일 발신자, 수신자 및 메일 내용 정의(그룹 초대 링크 포함)
-                    const info = await transporter.sendMail({
-                        from: "groupdiary@picanote.com", // picanote에서 발송 // `"WDMA Team" <${process.env.NODEMAILER_USER}>`
-                        to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일
-                        subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
-                        // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
-                        html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url + ">초대링크</a>"
-                    }); // 4.메일을 받은 유저가 메일 내 링크를 클릭하면 => 해당 토큰이 서버에 받아지고, users_groups에 해당 userId 및 groupId가 자동으로 저장됨
-
-                    console.log(info)
-                    // console.log("inviteData", inviteData)
-
-                    res.status(200).json({ message: '그룹 초대 메일이 발송되었습니다.' })
-                }
-
-                main().catch(console.error);
-
-
-            } // 그룹 초대할 사람이 2명일 때
-            else if (userInfo.length === 2) {
-                //req.body의 첫번째 이메일 유저에 대한 토큰 생성
-                const email1 = email[0]
-                const userId1 = userInfo[0].id
-                const inviteTokenFirst = jwt.sign({ userId: userId1, email: email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
-                const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
-                console.log("inviteDataFirst", inviteDataFirst)
-
-                //req.body의 두번째 이메일 유저에 대한 토큰 생성
-                const email2 = email[1]
-                const userId2 = userInfo[1].id
-                const inviteTokenSecond = jwt.sign({ userId: userId2, email: email2, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' })
-                const inviteDataSecond = jwt.verify(inviteTokenSecond, process.env.ACCESS_SECRET)
-                console.log("inviteDataSecond", inviteDataSecond)
-
-                async function main() {
-                    // create reusable transporter object using the default SMTP transport
-                    const { email } = req.body
-                    const transporter = nodemailer.createTransport({
-                        host: "smtp.mailtrap.io",
-                        port: 2525,
-                        secure: false,
-                        auth: {
-                            user: "44dbe1cbc3bed6",
-                            pass: "590788b48efe75",
-                        },
-                    });
-
-                    // const transporter = nodemailer.createTransport({
-                    //     service: 'gmail',
-                    //     host: 'smtp.gmail.com',
-                    //     port: 587,
-                    //     secure: false,
-                    //     auth: {
-                    //       user: process.env.NODEMAILER_USER,
-                    //       pass: process.env.NODEMAILER_PASS
-                    //     }
-                    //   });
-
-                    // send mail with defined transport object
-
-                    const url1 = `http://localhost:5000/invite/?token=${inviteTokenFirst}`
-
-                    const info1 = await transporter.sendMail({
-                        from: "groupdiary@picanote.com",
-                        to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 첫번째 메일)
-                        subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
-                        // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
-                        html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url1 + ">초대링크</a>"
-                    });
-
-                    const url2 = `http://localhost:5000/invite/?token=${inviteTokenSecond}`
-
-                    const info2 = await transporter.sendMail({
-                        from: "groupdiary@picanote.com",
-                        to: `${email[1]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 두번째 메일)
-                        subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
-                        // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
-                        html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url2 + ">초대링크</a>"
-                    });
-
-                    //console.log(userInfo)
-                    console.log(info1)
-                    console.log(info2)
-                    // console.log("inviteData", inviteData)
-
-                    res.status(200).json({ message: '그룹 초대 메일이 발송되었습니다.' })
-                }
-                main().catch(console.error);
+        if (email.length === 1) {
+            console.log('한명일 때')
+            const arr = []
+            const email1 = email[0]
+            const userInfo1 = await User.findOne({ where: { email: email1 } })
+            // 회원가입된 이메일이 아닐 때
+            if (userInfo1 === null) {
+                arr.push(email1)
+                return res.status(400).json({ message: `${arr[0]}의 이메일이 유효하지 않습니다.` })
             }
+
+            // 회원가입된 유저라면 토큰 생성 후 초대메일 발송
+            const userId = userInfo[0].id // email 초대하려는 사람의 userId(가입된 유저들만 초대 가능).
+            const inviteTokenFirst = jwt.sign({ userId, email: email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
+            const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
+            console.log("inviteData", inviteDataFirst)
+
+            async function main() {
+                // 3.선택한 유저들에게 초대 메일 발송
+                // 테스트용(mailtrap.io, 실제 전송은 안됨)
+                // create reusable transporter object using the default SMTP transport
+                const { email } = req.body
+                const transporter = await nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    secure: false, // true for 465, false for other ports
+                    auth: {
+                        user: "44dbe1cbc3bed6",
+                        pass: "590788b48efe75",
+                    },
+                });
+                // gmail smtp이용(실제 전송 됨)
+                // const transporter = nodemailer.createTransport({
+                //     service: 'gmail',
+                //     host: 'smtp.gmail.com',
+                //     port: 587,
+                //     secure: false,
+                //     auth: {
+                //       user: process.env.NODEMAILER_USER,
+                //       pass: process.env.NODEMAILER_PASS
+                //     }
+                //   });
+                const url = `http://localhost:5000/invite/?token=${inviteTokenFirst}`
+                //배포 클라이언트 주소로 바꾸기
+
+                // 메일 발신자, 수신자 및 메일 내용 정의(그룹 초대 링크 포함)
+                const info = await transporter.sendMail({
+                    from: "groupdiary@picanote.com", // picanote에서 발송 // `"WDMA Team" <${process.env.NODEMAILER_USER}>`
+                    to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일
+                    subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
+                    // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
+                    html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url + ">초대링크</a>"
+                }); // 4.메일을 받은 유저가 메일 내 링크를 클릭하면 => 해당 토큰이 서버에 받아지고, users_groups에 해당 userId 및 groupId가 자동으로 저장됨
+
+                console.log(info)
+                // console.log("inviteData", inviteData)
+
+                return res.status(200).json({ message: '그룹 초대 메일이 발송되었습니다.' })
+
+            }
+            main() //이메일 발송 함수 실행
         }
-        catch (err) {
-            // const userInfo = await User.findAll({
-            //     where: { email: email },
-            //     attributes: ['email']
-            // })
-            // const email1 = email[0]
-            // if (email1 !== userInfo.dataValues.email) {
-            //     console.log('유효한 이메일이 아닙니다.')
-            //     res.status(400).json({ message: '유효한 이메일이 아닙니다.' })
-            // }
-            // console.log(err)
+
+        // 그룹 초대할 사람이 2명일 때
+        if (email.length === 2) {
+            console.log("두명일 때")
+            const arr = []
+            const email1 = email[0]
+            const email2 = email[1]
+
+            const userInfo1 = await User.findOne({ where: { email: email1 } })
+            const userInfo2 = await User.findOne({ where: { email: email2 } })
+
+            //회원가입된 이메일이 아닐 때
+            if (userInfo1 === null) {
+                arr.push(email1)
+                return res.status(401).json({ message: `${arr[0]}의 이메일이 유효하지 않습니다.` })
+                //main().catch('err')
+            } else if (userInfo2 === null) {
+                arr.push(email2)
+                return res.status(401).json({ message: `${arr[0]}의 이메일이 유효하지 않습니다.` })
+            }
+
+            // 회원가입된 유저라면 토큰 생성 후 초대메일 발송
+            //req.body의 첫번째 이메일 유저에 대한 토큰 생성
+            const userId1 = userInfo[0].id
+            const inviteTokenFirst = jwt.sign({ userId: userId1, email: email1, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' }) // 초대하려는 사람의 userId, email, groupId 정보가 담긴 토큰 생성.
+            const inviteDataFirst = jwt.verify(inviteTokenFirst, process.env.ACCESS_SECRET)
+            console.log("inviteDataFirst", inviteDataFirst)
+
+            //req.body의 두번째 이메일 유저에 대한 토큰 생성
+            const userId2 = userInfo[1].id
+            const inviteTokenSecond = jwt.sign({ userId: userId2, email: email2, groupId }, process.env.ACCESS_SECRET, { expiresIn: '20m' })
+            const inviteDataSecond = jwt.verify(inviteTokenSecond, process.env.ACCESS_SECRET)
+            console.log("inviteDataSecond", inviteDataSecond)
+
+
+            async function main() {
+                // create reusable transporter object using the default SMTP transport
+                const { email } = req.body
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    secure: false,
+                    auth: {
+                        user: "44dbe1cbc3bed6",
+                        pass: "590788b48efe75",
+                    },
+                });
+
+                // const transporter = nodemailer.createTransport({
+                //     service: 'gmail',
+                //     host: 'smtp.gmail.com',
+                //     port: 587,
+                //     secure: false,
+                //     auth: {
+                //       user: process.env.NODEMAILER_USER,
+                //       pass: process.env.NODEMAILER_PASS
+                //     }
+                //   });
+
+                // send mail with defined transport object
+
+                const url1 = `http://localhost:5000/invite/?token=${inviteTokenFirst}`
+
+                const info1 = await transporter.sendMail({
+                    from: "groupdiary@picanote.com",
+                    to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 첫번째 메일)
+                    subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
+                    // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
+                    html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url1 + ">초대링크</a>"
+                });
+
+                const url2 = `http://localhost:5000/invite/?token=${inviteTokenSecond}`
+
+                const info2 = await transporter.sendMail({
+                    from: "groupdiary@picanote.com",
+                    to: `${email[1]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 두번째 메일)
+                    subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
+                    // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
+                    html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url2 + ">초대링크</a>"
+                });
+
+                //console.log(userInfo)
+                console.log(info1)
+                console.log(info2)
+                // console.log("inviteData", inviteData)
+
+                return res.status(201).json({ message: '그룹 초대 메일이 발송되었습니다.' })
+            }
+            main()//이메일 발송 함수 실행
+
         }
     },
 
@@ -187,10 +202,5 @@ module.exports = {
 
         res.status(201).json({ message: '그룹에 초대되었습니다.' })
         console.log("inviteData", inviteData)
-    },
-
-    deleteGroup: async (req, res) => {
-        //Groups owner만 그룹을 삭제할 수 있음.
-
     }
 }
