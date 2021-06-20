@@ -14,11 +14,11 @@ const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'picanote.me',
-        contentType: multer.AUTO_CONTENT_TYPE,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
         acl: 'public-read',
-        metadata: function (req, file, cb) {
-            cb(null, { fieldName: file.fieldname });
-        },
+        // metadata: function (req, file, cb) {
+        //     cb(null, { fieldName: file.fieldname });
+        // },
         key: function (req, file, cb) {
             cb(null, `uploads/${Date.now()}_${file.originalname}`)
         }
