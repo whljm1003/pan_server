@@ -5,14 +5,15 @@ const {
     books,
     myBook,
     myGroupBook,
-    private
+    private,
+    groupBookList
 } = require('../controllers/mypage');
 
 // * POST/mypage/books
 router.post("/books", books.post);
 
 // * GET/mypage/books
-router.get("/books", books.get);
+router.get("/books", books.get); //mypage에서 개인일기장 목록 보기
 
 // * PUT/mypage/books/:id
 router.put("/books/:id", books.put);
