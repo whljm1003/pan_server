@@ -14,11 +14,13 @@ const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'picanote.me',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        acl: 'public-read',
         metadata: function (req, file, cb) {
             cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-            cb(null, Date.now().toString())
+            cb(null, `uploads/${Date.now()}_${file.originalname}`)
         }
     })
 }) // S3로 이미지 업로드
