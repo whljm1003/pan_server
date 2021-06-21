@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         attributes: [
             "id",
             "userId",
-            [sequelize.col("username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
+            [sequelize.col("User.username"), "username"], //sequelize.col() : Creates an object which represents a column in the DB, this allows referencing another column in your query.
             "bookId", 
             [sequelize.col("groupId"), "groupId"],
             "type",
