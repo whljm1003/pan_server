@@ -24,7 +24,7 @@ module.exports = {
                 diaryId,
                 text
             })
-            res.status(200).json({ message: '일기가 성공적으로 저장되었습니다.' })
+            res.status(200).json({ message: '댓글이 성공적으로 저장되었습니다.' })
         }
     },
 
