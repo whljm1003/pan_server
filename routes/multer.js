@@ -23,6 +23,21 @@ const upload = multer({
             cb(null, `uploads/${Date.now()}_${file.originalname}`)
         }
     })
+}) // S3로 이미지 업로드(그림일기)
+
+const profileUpload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'picanote.me',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        acl: 'public-read',
+        // metadata: function (req, file, cb) {
+        //     cb(null, { fieldName: file.fieldname });
+        // },
+        key: function (req, file, cb) {
+            cb(null, `upload/${Date.now()}_${file.originalname}`)
+        }
+    })
 }) // S3로 이미지 업로드
 
 // const upload = multer({
@@ -39,3 +54,4 @@ const upload = multer({
 // }); // 이미지 업로드 로컬 테스트용(업로드 시 로컬에 이미지 파일이 저장됨)
 
 exports.upload = upload;
+exports.profileUpload = profileUpload;
