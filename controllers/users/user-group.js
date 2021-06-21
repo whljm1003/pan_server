@@ -75,7 +75,7 @@ module.exports = {
                 //       pass: process.env.NODEMAILER_PASS
                 //     }
                 //   });
-                const url = `http://localhost:5000/invite/?token=${inviteTokenFirst}`
+                const url = `https://api.picanote.me/invite/?token=${inviteTokenFirst}`
                 //배포 클라이언트 주소로 바꾸기
 
                 // 메일 발신자, 수신자 및 메일 내용 정의(그룹 초대 링크 포함)
@@ -156,7 +156,7 @@ module.exports = {
 
                 // send mail with defined transport object
 
-                const url1 = `http://localhost:5000/invite/?token=${inviteTokenFirst}`
+                const url1 = `https://api.picanote.me/invite/?token=${inviteTokenFirst}`
 
                 const info1 = await transporter.sendMail({
                     from: "groupdiary@picanote.com",
@@ -166,7 +166,7 @@ module.exports = {
                     html: "<p>아래 링크를 누르면 그룹으로 초대됩니다.</p>" + "<a href=" + url1 + ">초대링크</a>"
                 });
 
-                const url2 = `http://localhost:5000/invite/?token=${inviteTokenSecond}`
+                const url2 = `https://api.picanote.me/invite/?token=${inviteTokenSecond}`
 
                 const info2 = await transporter.sendMail({
                     from: "groupdiary@picanote.com",
