@@ -60,9 +60,11 @@ module.exports = {
                 },
                 {
                     model: Comment,
+
                     include: [{
                         model: User
                     }],
+                  
                     order: [ ['createdAt', 'DESC']]
                 }
                 ]
@@ -116,9 +118,11 @@ module.exports = {
                     },
                     {
                         model: Comment,
+
                         include: [{
                             model: User
                         }],
+
                         order: [ ['createdAt', 'DESC']]
                     }]
                 });
