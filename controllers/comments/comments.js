@@ -22,10 +22,9 @@ module.exports = {
             Comment.create({
                 userId: data.id, 
                 diaryId: id,
-                text,
+                text
             })
             console.log(req.params)
-            console.log(data.username)
             res.status(200).json({ message: '댓글이 성공적으로 저장되었습니다.' })
         }
     },
