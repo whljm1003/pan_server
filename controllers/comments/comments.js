@@ -11,7 +11,7 @@ module.exports = {
         const token = authorization.split(' ')[1];
         const data = jwt.verify(token, process.env.ACCESS_SECRET);
         const userInfo = await User.findByPk(data.id)
-        const { diaryId }= req.params
+        const { id }= req.params
         const { text } = req.body;
         if(!userInfo){
             return res.status(400).json({ message: '로그인 해 주세요!'})
@@ -21,10 +21,11 @@ module.exports = {
         }else{
             Comment.create({
                 userId: data.id, 
-                diaryId,
+                diaryId: id,
                 text
             })
-            res.status(200).json({ message: '일기가 성공적으로 저장되었습니다.' })
+            console.log(req.params)
+            res.status(200).json({ message: '댓글이 성공적으로 저장되었습니다.' })
         }
     },
 
@@ -44,6 +45,7 @@ module.exports = {
             Comment.destroy({
                 where: { id : commentId }
             })
+            console.log(req.params)
             res.status(200).json({ message: '댓글이 삭제되었습니다.' })
         }
     },
