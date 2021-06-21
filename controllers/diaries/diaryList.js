@@ -39,15 +39,18 @@ module.exports = async (req, res) => {
 
             {
                 model: Like,
-                attributes: []
+                include: [{
+                    model: User,
+                    attributes: ["username"]
+                }],
+                order: [ ['createdAt', 'DESC']]
             },
             {
                 model: Comment,
-                include:[
-                    {
-                        model: User,
-                    }
-                ],
+                include: [{
+                    model: User,
+                    attributes: ["username"]
+                }],
                 order: [ ['createdAt', 'DESC']]
             }
         ],

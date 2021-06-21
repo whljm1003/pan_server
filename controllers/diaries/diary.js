@@ -50,8 +50,11 @@ module.exports = {
                 attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                 include: [{
                     model: Like,
-                    required: false,
-                    attributes: []
+                    include: [{
+                        model: User,
+                        attributes: ["username"]
+                    }],
+                    order: [ ['createdAt', 'DESC']]
                 },
                 {
                     model: User,
@@ -61,7 +64,8 @@ module.exports = {
                 {
                     model: Comment,
                     include: [{
-                        model: User
+                        model: User,
+                        attributes: ["username"]
                     }],
                     order: [ ['createdAt', 'DESC']]
                 }
@@ -83,8 +87,11 @@ module.exports = {
                     attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
-                        required: false,
-                        attributes: []
+                        include: [{
+                            model: User,
+                            attributes: ["username"]
+                        }],
+                        order: [ ['createdAt', 'DESC']]
                     },
                     {
                         model: User,
@@ -94,7 +101,8 @@ module.exports = {
                     {
                         model: Comment,
                         include: [{
-                            model: User
+                            model: User,
+                            attributes: ["username"]
                         }],
                         order: [ ['createdAt', 'DESC']]
                     }]
@@ -106,8 +114,11 @@ module.exports = {
                     attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
-                        required: false,
-                        attributes: []
+                        include: [{
+                            model: User,
+                            attributes: ["username"]
+                        }],
+                        order: [ ['createdAt', 'DESC']]
                     },
                     {
                         model: User,
@@ -117,7 +128,8 @@ module.exports = {
                     {
                         model: Comment,
                         include: [{
-                            model: User
+                            model: User,
+                            attributes: ["username"]
                         }],
                         order: [ ['createdAt', 'DESC']]
                     }]
