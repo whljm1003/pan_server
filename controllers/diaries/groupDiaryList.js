@@ -42,6 +42,9 @@ module.exports = async (req, res) => {
             },
             {
                 model: Comment,
+                include: [{
+                    model: User
+                }],
                 order: [ ['createdAt', 'DESC']]
             }
         ],
