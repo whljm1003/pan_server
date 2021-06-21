@@ -2,8 +2,6 @@
 const { User, Group, Users_groups } = require('../../models');
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
-const accessToken = require('./accessToken');
-const { google } = require('googleapis')
 require("dotenv").config();
 
 module.exports = {
