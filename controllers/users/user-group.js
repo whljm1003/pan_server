@@ -23,6 +23,11 @@ module.exports = {
         }) // 여기서 groupdId가 생성됨.
         console.log(groupInfo)
 
+        const userGroup = await Users_groups.create({
+            UserId: data.id,
+            GroupId: groupInfo.dataValues.id
+        }) // 여기서 groupdId가 생성됨.
+
         // 초대하려는 유저 정보를 db에서 찾음(id랑 email정보만)
         const userInfo = await User.findAll({
             where: { email: email },
