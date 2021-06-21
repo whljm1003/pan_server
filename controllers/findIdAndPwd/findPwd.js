@@ -27,7 +27,7 @@ module.exports = {
                     pass: "590788b48efe75",
                 },
             });
-            const url = `http://localhost:80/reset/${token}`;
+            const url = `https://api.picanote.me/reset/${token}`;
             const emailOptions = {
                 from: "groupdiary@picanote.com",
                 to: email,
