@@ -9,6 +9,6 @@ router.post("/diaries/:id/comments", comments.post);
 // * PUT/comments
 router.put("/comments/:id", comments.put);
 // * DELETE/comments
-router.delete("/commments/:id", comments.delete);
+router.delete("/comments/:id", comments.delete);
 
 module.exports = router;

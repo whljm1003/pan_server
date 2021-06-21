@@ -3,7 +3,7 @@ const axios = require("axios");
 const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 //kakao로 로그인 회원 정보가 db에 있으면 (socialLoginId의 값이 일치하면) 로그인에 성공하고, 그렇지 않으면 db에 회원 정보를 저장한다.
-module.exports = async(req, res, next) => {
+module.exports = async(req, res) => {
     const { authorizationCode } = req.body;
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
