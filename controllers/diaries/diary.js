@@ -47,7 +47,7 @@ module.exports = {
         if (!authorization) {
             const diary = await Diary.findAll({
                 where: { id: diaryId, private: false },
-                attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
+                attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                 include: [{
                     model: Like,
                     required: false,
@@ -60,8 +60,11 @@ module.exports = {
                 },
                 {
                     model: Comment,
-                    required: false,
-                    attributes: []
+                    attributes: [
+                        "userId", // should be changed to [sequelize.col("username"), "username"]
+                        "text"                    
+                    ],
+                    order: [ ['createdAt', 'DESC']]
                 }
                 ]
             });
@@ -78,7 +81,7 @@ module.exports = {
             if (diary[0].dataValues.private === false) {
                 const publicDiary = await Diary.findAll({
                     where: { id: diaryId, private: false },
-                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
+                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
                         required: false,
@@ -91,15 +94,18 @@ module.exports = {
                     },
                     {
                         model: Comment,
-                        required: false,
-                        attributes: []
+                        attributes: [
+                            "userId", // should be changed to [sequelize.col("username"), "username"]
+                            "text"                    
+                        ],
+                        order: [ ['createdAt', 'DESC']]
                     }]
                 });
                 res.status(200).json({ data: publicDiary, message: '선택한 일기 내용입니다.' }); //로그인했을 때 private=false일기 보기
             } else if (diary[0].dataValues.private === true) {
                 const privateDiary = await Diary.findAll({
                     where: { id: diaryId, userId: data.id },
-                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("username"), "username"]],
+                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
                         required: false,
@@ -112,8 +118,11 @@ module.exports = {
                     },
                     {
                         model: Comment,
-                        required: false,
-                        attributes: []
+                        attributes: [
+                            "userId", // should be changed to [sequelize.col("username"), "username"]
+                            "text"                    
+                        ],
+                        order: [ ['createdAt', 'DESC']]
                     }]
                 });
                 res.status(200).json({ data: privateDiary, message: '선택한 일기 내용입니다.' });//로그인했을 때 private-true인 본인 일기 보기
