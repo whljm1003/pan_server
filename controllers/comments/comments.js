@@ -34,20 +34,25 @@ module.exports = {
         //댓글의 id를 파라미터로 전달받는다.
         //유저의 정보가 댓글을 작성했던 유저의 정보와 일치할 때만 삭제할 수 있다.
         const authorization = req.headers.authorization;
-        const token = authorization.split(' ')[1];
-        const data = jwt.verify(token, process.env.ACCESS_SECRET);
-        const commentId = req.params.id
-
-        const comment = await Comment.findByPk(commentId)
-        if(comment.dataValues.userId !== data.id){
-            return res.status(400).json({ message : '댓글을 삭제할 권한이 없습니다.'})
+        if(!authorization){
+            return res.status(400).json({ message: '로그인 해 주세요!'})
         }else{
-            Comment.destroy({
-                where: { id : commentId }
-            })
-            console.log(req.params)
-            res.status(200).json({ message: '댓글이 삭제되었습니다.' })
+            const token = authorization.split(' ')[1];
+            const data = jwt.verify(token, process.env.ACCESS_SECRET);
+            const commentId = req.params.id
+            const comment = await Comment.findByPk(commentId)
+            
+            if(comment.dataValues.userId !== data.id){
+                return res.status(400).json({ message : '댓글을 삭제할 권한이 없습니다.'})
+            }else{
+                Comment.destroy({
+                    where: { id : commentId }
+                })
+                console.log(req.params)
+                res.status(200).json({ message: '댓글이 삭제되었습니다.' })
+            }
         }
+
     },
 
     put : async (req, res) => {

@@ -42,10 +42,6 @@ module.exports = async (req, res) => {
             },
             {
                 model: Comment,
-                attributes: [
-                    "userId", // should be changed to [sequelize.col("username"), "username"]
-                    "text"                    
-                ],
                 order: [ ['createdAt', 'DESC']]
             }
         ],
