@@ -19,17 +19,18 @@ module.exports = {
             const token = jwt.sign({ id, username, email, profileUrl }, process.env.ACCESS_SECRET, {expiresIn:"1h"});
   
             const transporter = nodemailer.createTransport({
-                host: "smtp.mailtrap.io",
-                port: 2525, 
+                service: 'gmail',
+                host: "smtp.gmail.com",
+                port: 587, 
                 secure: false,
                 auth: {
-                    user: "44dbe1cbc3bed6",
-                    pass: "590788b48efe75",
+                    user: process.env.NODEMAILER_USER,
+                    pass: process.env.NODEMAILER_PASS,
                 },
             });
             const url = `https://api.picanote.me/reset/${token}`;
             const emailOptions = {
-                from: "groupdiary@picanote.com",
+                from: process.env.NODEMAILER_USER,
                 to: email,
                 subject: 'picanote 비밀번호 초기화 이메일입니다.',
                 html: '비밀번호 초기화를 위해 아래 URL을 클릭해 주세요.' + '<a href=' + url + '>초대링크</a>'
