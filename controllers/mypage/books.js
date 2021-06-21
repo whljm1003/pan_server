@@ -41,7 +41,8 @@ module.exports = {
             console.log('그룹정보', groupInfo)
             Book.create({
                 userId: userInfo.dataValues.id, // 이 사람이 group의 owner임. userId를 추가함으로써 owner에게만 일기장 수정 및 삭제의 권한이 부여됨.
-                groupId: groupInfo[groupInfo.length - 1].dataValues.id, // 만약 한 사람이 그룹을 2개 이상 만들면? 나중에 만든 그룹의 id가 groupId로 추가되어야 함 (항상 마지막 배열의 것)
+                // groupId: groupInfo[groupInfo.length - 1].dataValues.id, // 만약 한 사람이 그룹을 2개 이상 만들면? 나중에 만든 그룹의 id가 groupId로 추가되어야 함 (항상 마지막 배열의 것)
+                groupId: groupId,
                 bookName: bookName,
                 bookCover: bookCover,
             })

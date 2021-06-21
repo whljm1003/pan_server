@@ -92,7 +92,7 @@ module.exports = {
                 console.log(info)
                 // console.log("inviteData", inviteData)
 
-                return res.status(200).json({ groupId: groupInfo.dataValues.id, message: '그룹 초대 메일이 발송되었습니다.' })
+                return res.status(200).json({ groupInfo: groupInfo.dataValues, message: '그룹 초대 메일이 발송되었습니다.' })
 
             }
             main() //이메일 발송 함수 실행
@@ -193,7 +193,7 @@ module.exports = {
                 console.log(info2)
                 // console.log("inviteData", inviteData)
 
-                return res.status(201).json({ groupId: groupInfo.dataValues.id, message: '그룹 초대 메일이 발송되었습니다.' })
+                return res.status(201).json({ groupInfo: groupInfo.dataValues, message: '그룹 초대 메일이 발송되었습니다.' })
             }
             main()//이메일 발송 함수 실행
 
