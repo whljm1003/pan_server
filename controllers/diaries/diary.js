@@ -47,7 +47,7 @@ module.exports = {
         if (!authorization) {
             const diary = await Diary.findAll({
                 where: { id: diaryId, private: false },
-                attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
+                attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                 include: [{
                     model: Like,
                     required: false,
@@ -80,7 +80,7 @@ module.exports = {
             if (diary[0].dataValues.private === false) {
                 const publicDiary = await Diary.findAll({
                     where: { id: diaryId, private: false },
-                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
+                    attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
                         required: false,
@@ -103,7 +103,7 @@ module.exports = {
             } else if (diary[0].dataValues.private === true) {
                 const privateDiary = await Diary.findAll({
                     where: { id: diaryId, userId: data.id },
-                    attributes: [[sequelize.col("username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
+                    attributes: [[sequelize.col("User.username"), "username"], 'userId', 'title', 'weather', 'content', [sequelize.col("text"), "text"], 'date', 'feelings', 'picUrl', 'private', [sequelize.col("like"), "like"],],
                     include: [{
                         model: Like,
                         required: false,

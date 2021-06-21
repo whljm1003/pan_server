@@ -11,7 +11,7 @@ module.exports = {
             attributes: [
                 "id",
                 "userId",
-                [sequelize.col("username"), "username"],
+                [sequelize.col("User.username"), "username"],
                 "bookId",
                 [sequelize.col("groupId"), "groupId"],
                 "type",
@@ -39,11 +39,6 @@ module.exports = {
                 },
                 {
                     model: Comment,
-                    required: true,
-                    attributes: [
-                        "userId", // should be changed to [sequelize.col("username"), "username"]
-                        "text"                    
-                    ],
                     order: [ ['createdAt', 'DESC']]
                 }
             ],
