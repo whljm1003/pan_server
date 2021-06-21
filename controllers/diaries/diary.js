@@ -62,7 +62,9 @@ module.exports = {
                     model: Comment,
                     attributes: [
                         "userId", // should be changed to [sequelize.col("username"), "username"]
-                        "text"                    
+                        "text",
+                        "username",
+                        "date"                   
                     ],
                     order: [ ['createdAt', 'DESC']]
                 }
@@ -120,7 +122,7 @@ module.exports = {
                         model: Comment,
                         attributes: [
                             "userId", // should be changed to [sequelize.col("username"), "username"]
-                            "text"                    
+                            "text",                 
                         ],
                         order: [ ['createdAt', 'DESC']]
                     }]
