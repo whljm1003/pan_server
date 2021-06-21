@@ -20,9 +20,6 @@ const upload = multer({
         //     cb(null, { fieldName: file.fieldname });
         // },
         key: function (req, file, cb) {
-            // let extension = path.extname(file.originalname);
-            // let basename = path.basename(file.originalname, extension);
-            // cb(null, `uploads/${basename}-${Date.now()}${extension}`);
             cb(null, `uploads/${Date.now()}_${file.originalname}`)
         }
     })
