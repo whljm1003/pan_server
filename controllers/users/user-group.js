@@ -23,7 +23,7 @@ module.exports = {
             groupName: groupName,
             owner: data.id
         }) // 여기서 groupdId가 생성됨.
-        // console.log(groupInfo)
+        console.log(groupInfo)
 
         // 초대하려는 유저 정보를 db에서 찾음(id랑 email정보만)
         const userInfo = await User.findAll({
@@ -57,26 +57,26 @@ module.exports = {
                 // 테스트용(mailtrap.io, 실제 전송은 안됨)
                 // create reusable transporter object using the default SMTP transport
                 const { email } = req.body
-                // const transporter = await nodemailer.createTransport({
-                //     host: "smtp.mailtrap.io",
-                //     port: 2525,
-                //     secure: false, // true for 465, false for other ports
-                //     auth: {
-                //         user: "44dbe1cbc3bed6",
-                //         pass: "590788b48efe75",
-                //     },
-                // });
-                // gmail smtp이용(실제 전송 됨)
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    host: 'smtp.gmail.com',
-                    port: 587,
-                    secure: false,
+                const transporter = await nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    secure: false, // true for 465, false for other ports
                     auth: {
-                      user: process.env.NODEMAILER_USER,
-                      pass: process.env.NODEMAILER_PASS               
-                    }
-                  });
+                        user: "44dbe1cbc3bed6",
+                        pass: "590788b48efe75",
+                    },
+                });
+                // gmail smtp이용(실제 전송 됨)
+                // const transporter = nodemailer.createTransport({
+                //     service: 'gmail',
+                //     host: 'smtp.gmail.com',
+                //     port: 587,
+                //     secure: false,
+                //     auth: {
+                //       user: process.env.NODEMAILER_USER,
+                //       pass: process.env.NODEMAILER_PASS               
+                //     }
+                //   });
                 const url = `https://api.picanote.me/invite/?token=${inviteTokenFirst}`
                 //배포 클라이언트 주소로 바꾸기
 
@@ -92,7 +92,7 @@ module.exports = {
                 console.log(info)
                 // console.log("inviteData", inviteData)
 
-                return res.status(200).json({ message: '그룹 초대 메일이 발송되었습니다.' })
+                return res.status(200).json({ groupId: groupInfo.dataValues.id, message: '그룹 초대 메일이 발송되었습니다.' })
 
             }
             main() //이메일 발송 함수 실행
@@ -135,36 +135,36 @@ module.exports = {
             async function main() {
                 // create reusable transporter object using the default SMTP transport
                 const { email } = req.body
-                // const transporter = nodemailer.createTransport({
-                //     host: "smtp.mailtrap.io",
-                //     port: 2525,
-                //     secure: false,
-                //     auth: {
-                //         user: "44dbe1cbc3bed6",
-                //         pass: "590788b48efe75",
-                //     },
-                // });
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    secure: false,
+                    auth: {
+                        user: "44dbe1cbc3bed6",
+                        pass: "590788b48efe75",
+                    },
+                });
 
-                const oAuth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_SECRET)
-                // oAuth2Client.setCredentials({ refreshToken: process.env.REFRESH_SECRET})
+                // const oAuth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_SECRET)
+                // // oAuth2Client.setCredentials({ refreshToken: process.env.REFRESH_SECRET})
 
              
-                    const accessToken = await oAuth2Client.getAccessToken()
+                //     const accessToken = await oAuth2Client.getAccessToken()
                     
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    // host: 'smtp.gmail.com',
-                    // port: 587,
-                    // secure: false,
-                    auth: {
-                        user: process.env.NODEMAILER_USER,
-                        type: 'OAuth2',
-                        clientId: process.env.GOOGLE_CLIENT_ID,
-                        clientSecret: process.env.GOOGLE_SECRET,
-                        accessToken: accessToken,
-                        refreshToken: process.env.REFRESH_SECRET
-                      }
-                  });
+                // const transporter = nodemailer.createTransport({
+                //     service: 'gmail',
+                //     // host: 'smtp.gmail.com',
+                //     // port: 587,
+                //     // secure: false,
+                //     auth: {
+                //         user: process.env.NODEMAILER_USER,
+                //         type: 'OAuth2',
+                //         clientId: process.env.GOOGLE_CLIENT_ID,
+                //         clientSecret: process.env.GOOGLE_SECRET,
+                //         accessToken: accessToken,
+                //         refreshToken: process.env.REFRESH_SECRET
+                //       }
+                //   });
 
                 // send mail with defined transport object
 
@@ -193,7 +193,7 @@ module.exports = {
                 console.log(info2)
                 // console.log("inviteData", inviteData)
 
-                return res.status(201).json({ message: '그룹 초대 메일이 발송되었습니다.' })
+                return res.status(201).json({ groupId: groupInfo.dataValues.id, message: '그룹 초대 메일이 발송되었습니다.' })
             }
             main()//이메일 발송 함수 실행
 
