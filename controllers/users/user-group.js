@@ -2,6 +2,8 @@
 const { User, Group, Users_groups } = require('../../models');
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
+const accessToken = require('./accessToken');
+const {google} = require('googleapis')
 require("dotenv").config();
 
 module.exports = {
@@ -55,32 +57,32 @@ module.exports = {
                 // 테스트용(mailtrap.io, 실제 전송은 안됨)
                 // create reusable transporter object using the default SMTP transport
                 const { email } = req.body
-                const transporter = await nodemailer.createTransport({
-                    host: "smtp.mailtrap.io",
-                    port: 2525,
-                    secure: false, // true for 465, false for other ports
-                    auth: {
-                        user: "44dbe1cbc3bed6",
-                        pass: "590788b48efe75",
-                    },
-                });
-                // gmail smtp이용(실제 전송 됨)
-                // const transporter = nodemailer.createTransport({
-                //     service: 'gmail',
-                //     host: 'smtp.gmail.com',
-                //     port: 587,
-                //     secure: false,
+                // const transporter = await nodemailer.createTransport({
+                //     host: "smtp.mailtrap.io",
+                //     port: 2525,
+                //     secure: false, // true for 465, false for other ports
                 //     auth: {
-                //       user: process.env.NODEMAILER_USER,
-                //       pass: process.env.NODEMAILER_PASS
-                //     }
-                //   });
+                //         user: "44dbe1cbc3bed6",
+                //         pass: "590788b48efe75",
+                //     },
+                // });
+                // gmail smtp이용(실제 전송 됨)
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false,
+                    auth: {
+                      user: process.env.NODEMAILER_USER,
+                      pass: process.env.NODEMAILER_PASS               
+                    }
+                  });
                 const url = `https://api.picanote.me/invite/?token=${inviteTokenFirst}`
                 //배포 클라이언트 주소로 바꾸기
 
                 // 메일 발신자, 수신자 및 메일 내용 정의(그룹 초대 링크 포함)
                 const info = await transporter.sendMail({
-                    from: "groupdiary@picanote.com", // picanote에서 발송 // `"WDMA Team" <${process.env.NODEMAILER_USER}>`
+                    from: process.env.NODEMAILER_USER, // picanote에서 발송 // `"WDMA Team" <${process.env.NODEMAILER_USER}>`
                     to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일
                     subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
                     // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
@@ -133,33 +135,43 @@ module.exports = {
             async function main() {
                 // create reusable transporter object using the default SMTP transport
                 const { email } = req.body
-                const transporter = nodemailer.createTransport({
-                    host: "smtp.mailtrap.io",
-                    port: 2525,
-                    secure: false,
-                    auth: {
-                        user: "44dbe1cbc3bed6",
-                        pass: "590788b48efe75",
-                    },
-                });
-
                 // const transporter = nodemailer.createTransport({
-                //     service: 'gmail',
-                //     host: 'smtp.gmail.com',
-                //     port: 587,
+                //     host: "smtp.mailtrap.io",
+                //     port: 2525,
                 //     secure: false,
                 //     auth: {
-                //       user: process.env.NODEMAILER_USER,
-                //       pass: process.env.NODEMAILER_PASS
-                //     }
-                //   });
+                //         user: "44dbe1cbc3bed6",
+                //         pass: "590788b48efe75",
+                //     },
+                // });
+
+                const oAuth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_SECRET)
+                // oAuth2Client.setCredentials({ refreshToken: process.env.REFRESH_SECRET})
+
+             
+                    const accessToken = await oAuth2Client.getAccessToken()
+                    
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    // host: 'smtp.gmail.com',
+                    // port: 587,
+                    // secure: false,
+                    auth: {
+                        user: process.env.NODEMAILER_USER,
+                        type: 'OAuth2',
+                        clientId: process.env.GOOGLE_CLIENT_ID,
+                        clientSecret: process.env.GOOGLE_SECRET,
+                        accessToken: accessToken,
+                        refreshToken: process.env.REFRESH_SECRET
+                      }
+                  });
 
                 // send mail with defined transport object
 
                 const url1 = `https://api.picanote.me/invite/?token=${inviteTokenFirst}`
 
                 const info1 = await transporter.sendMail({
-                    from: "groupdiary@picanote.com",
+                    from: process.env.NODEMAILER_USER,
                     to: `${email[0]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 첫번째 메일)
                     subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
                     // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
@@ -169,7 +181,7 @@ module.exports = {
                 const url2 = `https://api.picanote.me/invite/?token=${inviteTokenSecond}`
 
                 const info2 = await transporter.sendMail({
-                    from: "groupdiary@picanote.com",
+                    from: process.env.NODEMAILER_USER,
                     to: `${email[1]}`, // 초대하려고 선택한 유저의 이메일(req.body배열 중 두번째 메일)
                     subject: "PicaNote 그룹일기 초대 메일입니다.", // Subject line
                     // text: `${userInfo.dataValues.username}` + "님이 Picanote그룹일기로 초대하셨습니다. 아래 링크를 누르면 그룹으로 초대됩니다." + `http://localhost:5000/invite/?token=${inviteToken}`, // 로그인한 유저의 이름으로 초대메세지가 입력됨
