@@ -60,12 +60,11 @@ module.exports = {
                 },
                 {
                     model: Comment,
-                    attributes: [
-                        "userId", // should be changed to [sequelize.col("username"), "username"]
-                        "text",
-                        "username",
-                        "date"                   
-                    ],
+
+                    include: [{
+                        model: User
+                    }],
+                  
                     order: [ ['createdAt', 'DESC']]
                 }
                 ]
@@ -96,10 +95,9 @@ module.exports = {
                     },
                     {
                         model: Comment,
-                        attributes: [
-                            "userId", // should be changed to [sequelize.col("username"), "username"]
-                            "text"                    
-                        ],
+                        include: [{
+                            model: User
+                        }],
                         order: [ ['createdAt', 'DESC']]
                     }]
                 });
@@ -120,10 +118,11 @@ module.exports = {
                     },
                     {
                         model: Comment,
-                        attributes: [
-                            "userId", // should be changed to [sequelize.col("username"), "username"]
-                            "text",                 
-                        ],
+
+                        include: [{
+                            model: User
+                        }],
+
                         order: [ ['createdAt', 'DESC']]
                     }]
                 });
