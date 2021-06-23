@@ -28,7 +28,7 @@ module.exports = {
                     pass: process.env.NODEMAILER_PASS,
                 },
             });
-            const url = `https://picanote.me/reset/${token}`;
+            const url = `https://picanote.me/resetPwd/${token}`;
             const emailOptions = {
                 from: process.env.NODEMAILER_USER,
                 to: email,
