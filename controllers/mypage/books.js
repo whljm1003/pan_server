@@ -63,7 +63,12 @@ module.exports = {
                 where : {userId: data.id},      
             }).then(arr => arr.map(el => el.groupId))
             const allBooks = await Book.findAll({
-                where: { groupId: {[sequelize.Op.in]: myGroupList} },
+                where: { 
+                    [sequelize.Op.or]: [
+                        {groupId: {[sequelize.Op.in]: myGroupList}},
+                        {userId: data.id}
+                     ]
+                     },
                 attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
                 include: [{
                     model: Diary,
