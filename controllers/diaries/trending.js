@@ -13,7 +13,6 @@ module.exports = {
                 "userId",
                 [sequelize.col("User.username"), "username"],
                 "bookId",
-                [sequelize.col("groupId"), "groupId"],
                 "type",
                 "title",
                 "weather",
@@ -34,11 +33,18 @@ module.exports = {
                 },
                 {
                     model: Like,
-                    required: false,
-                    attributes: []
+                    include: [{
+                        model: User,
+                        attributes: ["username"]
+                    }],
+                    order: [ ['createdAt', 'DESC']]
                 },
                 {
                     model: Comment,
+                    include: [{
+                        model: User,
+                        attributes: ["username"]
+                    }],
                     order: [ ['createdAt', 'DESC']]
                 }
             ],

@@ -5,8 +5,11 @@ const jwt = require("jsonwebtoken");
 //kakao로 로그인 회원 정보가 db에 있으면 (socialLoginId의 값이 일치하면) 로그인에 성공하고, 그렇지 않으면 db에 회원 정보를 저장한다.
 module.exports = async (req, res) => {
     const { authorizationCode } = req.body;
+
+    console.log(authorizationCode)
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
+
     // const kakaoToken = await axios.post(`https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=https://www.picanote.me&code=${authorizationCode}`)
 
     const kakaoToken = await axios.post("https://www.picanote.me", {
@@ -24,7 +27,10 @@ module.exports = async (req, res) => {
     //   )
     //   .catch(err => err);
 
+
     const { accessToken } = kakaoToken.data;
+    const { refreshToken } = kakaoToken.data;
+    console.log(kakaoToken)
     const kakaoUserInfo = await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
             Authorization: `Bearer ${accessToken}`
