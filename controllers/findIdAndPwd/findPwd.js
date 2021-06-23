@@ -40,8 +40,10 @@ module.exports = {
         }
     },
     resetPwd: async(req, res) => {
-        //const { token } = req.query;
-        const token = new URL(window.location.href).searchParams.get('code');
+        const { tk } = req.query;
+        const token = new URL(window.location.href).searchParams.get('token');
+        console.log(tk)
+        console.log(token)
         const authData = jwt.verify(token, process.env.ACCESS_SECRET);
         const { password } = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
