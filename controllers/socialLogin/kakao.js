@@ -10,8 +10,6 @@ module.exports = async (req, res) => {
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
 
-    // const kakaoToken = await axios.post(`https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=https://www.picanote.me&code=${authorizationCode}`)
-
     const kakaoToken = await axios.post("https://kauth.kakao.com/oauth/token?", {
         client_id: clientId,
         client_secret: clientSecret,
@@ -19,21 +17,13 @@ module.exports = async (req, res) => {
         grant_type: "authorization_code",
         redirect_uri: "https://picanote.me/kakao"
     })
-    //   .then(response => {
-    //     // console.log("RESPONSE", response);
-    //     const {access_token} = response.data
-    //     res.status(200).json({ accessToken: access_token });
-    //   }
-    //   )
-    //   .catch(err => err);
 
+    const { access_token } = kakaoToken.data;
+    const { refresh_token } = kakaoToken.data;
 
-    const { accessToken } = kakaoToken.data;
-    const { refreshToken } = kakaoToken.data;
-    console.log(kakaoToken)
     const kakaoUserInfo = await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
-            Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${access_token}`
         }
     });
 
