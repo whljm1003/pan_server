@@ -1,6 +1,6 @@
 //작성자:문지영
 const sequelize = require("sequelize");
-const { User, Book, Diary, Like, Group } = require('../../models');
+const { User, Book, Diary, Like, Group, Users_groups } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -76,11 +76,10 @@ module.exports = {
                     }]
                 }]
             });
+            res.status(200).json({ data: allBooks, message: '모든 일기장 및 일기 목록입니다.' });
         }
-
-
-
-        //mypage에서 내가 생성한 개인일기장 목록 보기(로그인 회원만 볼 수 있음).
+        
+                //mypage에서 내가 생성한 개인일기장 목록 보기(로그인 회원만 볼 수 있음).
         // const allBooks = await Book.findAll({
         //     where: { userId: data.id },
         //     attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
@@ -95,7 +94,6 @@ module.exports = {
         //         }]
         //     }]
         // });
-        res.status(200).json({ data: allBooks, message: '모든 일기장 및 일기 목록입니다.' });
 
     },
 
