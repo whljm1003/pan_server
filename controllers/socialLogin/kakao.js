@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
     const clientSecret = process.env.CLIENT_SECRET;
     // const kakaoToken = await axios.post(`https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=https://www.picanote.me&code=${authorizationCode}`)
 
-    const kakaoToken = await axios.post("https://www.picanote.me", {
+    const kakaoToken = await axios.post("https://kauth.kakao.com/oauth/token?", {
         client_id: clientId,
         client_secret: clientSecret,
         code: authorizationCode,
