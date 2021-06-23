@@ -54,29 +54,47 @@ module.exports = {
         // mypage에서 개인 일기장 목록 보기
         // GET/books
         const authorization = req.headers.authorization;
-
         if (!authorization) {
             return res.status(400).json({ message: '로그인 후 이용해주세요.' })
+        }else{
+            const token = authorization.split(' ')[1];
+            const data = jwt.verify(token, process.env.ACCESS_SECRET);
+            const myGroupList = await Users_groups.findAll({ 
+                where : {userId: data.id},      
+            }).then(arr => arr.map(el => el.groupId))
+            const allBooks = await Book.findAll({
+                where: { groupId: {[sequelize.Op.in]: myGroupList} },
+                attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
+                include: [{
+                    model: Diary,
+                    required: false,
+                    attributes: ['id', 'userId', 'bookId', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
+                    include: [{
+                        model: Like,
+                        required: false,
+                        attributes: ['like']
+                    }]
+                }]
+            });
         }
 
-        const token = authorization.split(' ')[1];
-        const data = jwt.verify(token, process.env.ACCESS_SECRET);
+
 
         //mypage에서 내가 생성한 개인일기장 목록 보기(로그인 회원만 볼 수 있음).
-        const allBooks = await Book.findAll({
-            where: { userId: data.id },
-            attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
-            include: [{
-                model: Diary,
-                required: false,
-                attributes: ['id', 'userId', 'bookId', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
-                include: [{
-                    model: Like,
-                    required: false,
-                    attributes: ['like']
-                }]
-            }]
-        });
+        // const allBooks = await Book.findAll({
+        //     where: { userId: data.id },
+        //     attributes: ['id', 'userId', 'groupId', 'bookName', 'bookCover'],
+        //     include: [{
+        //         model: Diary,
+        //         required: false,
+        //         attributes: ['id', 'userId', 'bookId', 'title', 'weather', 'content', 'private', 'picUrl', 'date', 'feelings'],
+        //         include: [{
+        //             model: Like,
+        //             required: false,
+        //             attributes: ['like']
+        //         }]
+        //     }]
+        // });
         res.status(200).json({ data: allBooks, message: '모든 일기장 및 일기 목록입니다.' });
 
     },
