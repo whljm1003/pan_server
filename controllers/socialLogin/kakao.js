@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
 
-    const kakaoToken = await axios.get("https://kauth.kakao.com/oauth/token?", {
+    const kakaoToken = await axios.post("https://kauth.kakao.com/oauth/token?", {
         client_id: clientId,
         client_secret: clientSecret,
         code: authorizationCode,

@@ -7,7 +7,7 @@ const {
 } = require('../controllers/socialLogin');
 
 // *POST/kakao
-router.post('/kakao', kakao);
+router.get('/kakao', kakao);
 
 // *POST/google
 router.post('/google', google);
