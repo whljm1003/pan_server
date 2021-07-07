@@ -26,7 +26,7 @@ module.exports = {
         const userGroup = await Users_groups.create({
             UserId: data.id,
             GroupId: groupInfo.dataValues.id
-        }) // 여기서 groupdId가 생성됨.
+        }) // owner도 그룹에 추가될 수 있도록 함.
 
         // 초대하려는 유저 정보를 db에서 찾음(id랑 email정보만)
         const userInfo = await User.findAll({
