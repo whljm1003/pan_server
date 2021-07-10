@@ -1,6 +1,6 @@
 //작성자:문지영
 const sequelize = require("sequelize");
-const { Diary, Like } = require('../../models');
+const { Diary, Like, Book } = require('../../models');
 const { or, and, like } = sequelize.Op;
 
 
@@ -29,9 +29,14 @@ module.exports = async (req, res) => {
     // 조건은 private이 false이면서(and), title or content중 일치하는 내용이 있을 때
     const diary = await Diary.findAll({
         where: { [and]: [{ private: false }], [or]: [{ title: { [like]: `%${keyword}%` } }, { content: { [like]: `%${keyword}%` } }] },
-        attributes: ['id', 'userId', 'bookId', 'type', 'title', 'weather', 'content', [sequelize.col("like"), "like"], 'private', 'picUrl', 'date', 'feelings', 'createdAt', 'updatedAt'],
+        attributes: ['id', 'userId', 'bookId', [sequelize.col("bookCover"), "bookCover"], 'type', 'title', 'weather', 'content', [sequelize.col("like"), "like"], 'private', 'picUrl', 'date', 'feelings', 'createdAt', 'updatedAt'],
         include: [{
             model: Like,
+            required: false,
+            attributes: []
+        },
+        {
+            model: Book,
             required: false,
             attributes: []
         }]
