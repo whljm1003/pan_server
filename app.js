@@ -5,32 +5,39 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
 const models = require("./models/index.js");
-const userRoutes = require('./routes/users');
-const diaryRoutes = require('./routes/diaries');
-const mypageRoutes = require('./routes/mypage');
-const profileRoutes = require('./routes/profile');
-const commentRoutes = require('./routes/comments');
-const findIdAndPwdRoutes = require('./routes/findIdAndPwd');
-const socialLoginRoutes = require('./routes/socialLogin');
+const userRoutes = require("./routes/users");
+const diaryRoutes = require("./routes/diaries");
+const mypageRoutes = require("./routes/mypage");
+const profileRoutes = require("./routes/profile");
+const commentRoutes = require("./routes/comments");
+const socialLoginRoutes = require("./routes/socialLogin");
 
 require("dotenv").config();
 
-models.sequelize.sync().then(() => {
+models.sequelize
+  .sync()
+  .then(() => {
     console.log(" DB 연결 성공");
-}).catch(err => {
+  })
+  .catch((err) => {
     console.log("연결 실패");
     console.log(err);
-})
+  });
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
-    cors({
-        origin: ["http://localhost:3000", "https://picanote.me", "https://www.picanote.me"],
-        credentials: true,
-        methods: ["GET", "POST", "DELETE", "PUT"],
-    })
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://localhost:3000",
+      "https://picanote.site",
+      "https://www.picanote.site",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+  })
 );
 
 app.use("/", userRoutes);
@@ -38,11 +45,10 @@ app.use("/", diaryRoutes);
 app.use("/", mypageRoutes);
 app.use("/", profileRoutes);
 app.use("/", commentRoutes);
-app.use("/", findIdAndPwdRoutes);
 app.use("/", socialLoginRoutes);
 
-const HTTPS_PORT = process.env.HTTPS_PORT || 5000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 3306;
 
-let server = app.listen(HTTPS_PORT)
+let server = app.listen(HTTPS_PORT);
 
 module.exports = server;

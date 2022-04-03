@@ -13,9 +13,9 @@ module.exports = {
   production: {
     username: "root",
     password: process.env.DATABASE_PASSWORD,
-    database: "pan",
+    database: "picanote",
     host: process.env.DATABASE_HOST,
     dialect: "mysql",
-    port: '13306'
+    port: '3306'
   }
 }
