@@ -47,8 +47,8 @@ app.use("/", profileRoutes);
 app.use("/", commentRoutes);
 app.use("/", socialLoginRoutes);
 
-const HTTPS_PORT = process.env.HTTPS_PORT || 3306;
+const PORT = 13306;
 
-let server = app.listen(HTTPS_PORT);
+let server = app.listen(PORT);
 
 module.exports = server;

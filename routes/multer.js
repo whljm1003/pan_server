@@ -13,7 +13,7 @@ const s3 = new aws.S3({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "picanote.site",
+    bucket: "picanote",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     // metadata: function (req, file, cb) {
@@ -28,7 +28,7 @@ const upload = multer({
 const profileUpload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "picanote.site",
+    bucket: "picanote",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     // metadata: function (req, file, cb) {
